@@ -1,0 +1,51 @@
+.icon {
+  --_disc: var(--ms-icon-size, 56px);
+  --_glyph: calc(var(--_disc) * 0.6);
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--_disc);
+  block-size: var(--_disc);
+  flex: none;
+}
+
+.disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--ms-mist);
+  z-index: 0;
+}
+
+.glyph {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  font-size: calc(var(--_disc) * 0.46);
+  line-height: 1;
+  color: var(--ms-pine);
+  -webkit-font-smoothing: antialiased;
+}
+
+.canvas {
+  position: relative;
+  z-index: 2;
+  inline-size: var(--_glyph);
+  block-size: var(--_glyph);
+  pointer-events: none;
+}
+
+.fallback {
+  position: absolute;
+  z-index: 1;
+  inline-size: var(--_glyph);
+  block-size: var(--_glyph);
+  object-fit: contain;
+}
+
+.fallback[hidden] {
+  display: none;
+}

@@ -1,0 +1,64 @@
+---
+import Base from "@/layouts/Base.astro";
+import Nav from "@/components/sections/Nav.astro";
+import Hero from "@/components/sections/Hero.astro";
+import Story from "@/components/sections/Story.astro";
+import WhatWeDo from "@/components/sections/WhatWeDo.astro";
+import HowItWorks from "@/components/sections/HowItWorks.astro";
+import ImpactValues from "@/components/sections/ImpactValues.astro";
+import Climate from "@/components/sections/Climate.astro";
+import ConnectCta from "@/components/sections/ConnectCta.astro";
+import WavyDivider from "@/components/fx/WavyDivider/WavyDivider.astro";
+
+const CREAM = "var(--ms-cream)";
+const FOREST = "var(--ms-forest)";
+const DEEP = "color-mix(in srgb, var(--ms-forest) 82%, #000)";
+const TECH_TOP = "#0e1f17";
+const TECH_BOTTOM = "#091610";
+const STORY_DARK = "#0d1d15";
+---
+
+<Base>
+  <Nav />
+
+  <main>
+    <Hero />
+
+    <Story />
+
+    <div class="ms-seam" style={`background:${STORY_DARK}`}>
+      <WavyDivider fill={CREAM} />
+    </div>
+
+    <WhatWeDo />
+
+    <div class="ms-seam" style={`background:${CREAM}`}>
+      <WavyDivider fill={TECH_TOP} />
+    </div>
+
+    <HowItWorks />
+
+    <div class="ms-seam" style={`background:${TECH_BOTTOM}`}>
+      <WavyDivider fill={CREAM} />
+    </div>
+
+    <ImpactValues />
+
+    <div class="ms-seam ms-seam--impact" style={`background:${CREAM}`}>
+      <WavyDivider fill={STORY_DARK} />
+    </div>
+
+    <Climate />
+
+    <ConnectCta />
+  </main>
+</Base>
+
+<style>
+  .ms-seam {
+    line-height: 0;
+  }
+  .ms-seam--impact {
+    --ms-divider-from: transparent;
+  }
+</style>

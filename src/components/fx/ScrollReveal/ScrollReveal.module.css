@@ -1,0 +1,21 @@
+.ms-sr-breathe {
+  animation: ms-sr-breathe var(--ms-breathe-dur, 8s) var(--ease-soft-in-out, ease-in-out) infinite;
+  will-change: transform;
+}
+
+@keyframes ms-sr-breathe {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-sr-breathe {
+    animation: none;
+    will-change: auto;
+  }
+}

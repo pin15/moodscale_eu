@@ -1,0 +1,19 @@
+.handScript {
+  display: inline-block;
+  line-height: 0;
+  color: var(--ms-handscript-color, var(--ms-moss));
+}
+
+:global([data-fx="hand-script"] svg) {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+:global([data-fx="hand-script"] path) {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

@@ -1,0 +1,51 @@
+---
+import Base from "@/layouts/Base.astro";
+import styles from "@/components/fx/LandscapeParallax/LandscapeParallax.module.css";
+
+const layers: { name: string; bg: string }[] = [
+  { name: "sky", bg: "linear-gradient(#bcd9e8 0%, #dce8d8 100%)" },
+  { name: "mountains", bg: "linear-gradient(transparent 46%, #7d9a91 46%, #5f7e74 100%)" },
+  { name: "hills", bg: "linear-gradient(transparent 58%, #6f8f5f 58%, #4e7355 100%)" },
+  { name: "lake", bg: "linear-gradient(transparent 70%, #4a6f86 70%, #2f5066 100%)" },
+  { name: "foreground", bg: "linear-gradient(transparent 74%, #2f5740 78%, #1e3a2b 100%)" },
+  { name: "figures", bg: "radial-gradient(40vmin 30vmin at 70% 82%, rgba(30,58,43,.9), transparent 70%)" },
+];
+---
+
+<Base title="Demo — Landscape Parallax (doc 04)">
+  <div style="height:70vh; display:grid; place-items:center; font-family:var(--font-display); color:var(--ms-pine);">
+    Scroll down ↓
+  </div>
+
+  <section
+    data-fx="landscape-parallax"
+    data-mode="sliced"
+    data-intensity="1"
+    class={styles.scene}
+    style="--ms-scene-height:100vh"
+    aria-hidden="true"
+  >
+    <div class="ms-sun"><span class="ms-sun-core"></span></div>
+    {layers.map((l) => (
+      <div class={styles.layer} data-layer={l.name} style={`background:${l.bg}`}></div>
+    ))}
+  </section>
+
+  <div style="height:140vh; display:grid; place-items:center; font-family:var(--font-body); color:var(--ms-ink-soft);">
+    Spacer — keep scrolling to scrub the scene out.
+  </div>
+
+  <script>
+    import { initLandscapeParallax } from "@/components/fx/LandscapeParallax/landscapeParallax";
+
+    const teardowns: Array<() => void> = [];
+    document
+      .querySelectorAll<HTMLElement>('[data-fx="landscape-parallax"]')
+      .forEach((root) => teardowns.push(initLandscapeParallax(root)));
+    document.addEventListener(
+      "astro:before-swap",
+      () => teardowns.forEach((t) => t()),
+      { once: true },
+    );
+  </script>
+</Base>

@@ -1,0 +1,111 @@
+---
+import Base from "@/layouts/Base.astro";
+import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
+
+const check = `<svg class="ms-check" width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none"><path d="M4 11.5 L9 16.5 L18 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+---
+
+<Base title="Demo — Text Reveal">
+  <main class="demo">
+    <section class="spacer"><p>Scroll down ↓</p></section>
+
+    <TextReveal>
+      <section class="block">
+        <h2 data-reveal="lines">Technology with Empathy</h2>
+        <p data-reveal="fade">
+          As technology reshapes how we live, MoodScale keeps the human at the
+          centre — pairing psychology with gentle, ambient design so that
+          understanding your feelings never feels clinical.
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-reveal="lines">What We Do</h2>
+        <ul class="checklist" data-reveal="checklist">
+          <li set:html={check + " Track emotional patterns over time"} />
+          <li set:html={check + " Build self-awareness, one day at a time"} />
+          <li set:html={check + " Surface gentle, science-backed nudges"} />
+          <li set:html={check + " Heal in community, never alone"} />
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 data-reveal="lines">Our Impact &amp; Values</h2>
+        <p data-reveal="fade">
+          Founded in India in 2023 and women-led, with offices in Pune and Bonn.
+        </p>
+      </section>
+
+      <section class="block finale">
+        <blockquote data-reveal="quote">
+          When we heal people, we heal communities. When we heal communities, we
+          heal the world.
+        </blockquote>
+      </section>
+    </TextReveal>
+
+    <section class="spacer"></section>
+  </main>
+</Base>
+
+<style>
+  .demo {
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding-inline: var(--sp-3);
+    color: var(--ms-ink);
+    font-family: var(--font-body);
+  }
+  .spacer {
+    min-height: 80vh;
+    display: grid;
+    place-items: center;
+    color: var(--ms-ink-soft);
+  }
+  .block {
+    padding-block: var(--sp-6);
+    border-top: 1px solid var(--ms-line);
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-size: var(--fs-h1);
+    color: var(--ms-pine);
+    line-height: 1.12;
+    margin: 0 0 var(--sp-3);
+    max-width: 18ch;
+  }
+  p {
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    max-width: 60ch;
+    margin: 0;
+  }
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--sp-2);
+    font-size: var(--fs-body);
+  }
+  .checklist li {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+  .ms-check {
+    color: var(--ms-moss);
+    flex: none;
+  }
+  .finale {
+    text-align: center;
+  }
+  blockquote {
+    font-family: var(--font-display);
+    font-size: var(--fs-h2);
+    color: var(--ms-pine);
+    line-height: 1.4;
+    max-width: 24ch;
+    margin-inline: auto;
+  }
+</style>

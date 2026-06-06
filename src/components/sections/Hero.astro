@@ -1,0 +1,175 @@
+---
+import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
+---
+
+<section id="top" class="ms-section ms-hero" data-theme="dark">
+  <video
+    class="ms-hero__bg"
+    poster="/assets/video/hero-bg-poster.jpg"
+    muted
+    loop
+    playsinline
+    preload="metadata"
+    aria-hidden="true"
+  >
+    <source src="/assets/video/hero-bg.webm" type="video/webm" />
+    <source src="/assets/video/hero-bg.mp4" type="video/mp4" />
+  </video>
+  <div class="ms-hero__scrim" aria-hidden="true"></div>
+
+  <div class="ms-container ms-hero__inner">
+    <div class="ms-hero__copy">
+      <TextReveal>
+        <p class="ms-eyebrow" data-reveal="fade">A well-being initiative towards UN goals</p>
+
+        <h1 class="ms-hero__title" data-reveal="lines">
+          Reimagining mental <span class="ms-nowrap">well-being</span> with empathy
+          &amp; technology.
+        </h1>
+
+        <p class="ms-hero__lead" data-reveal="fade">
+          MoodScale EU is an initiative towards the UN Sustainable Development
+          Goals, especially Good Health &amp; Well-being, Gender Equality,
+          Decent Work, Reduced Inequalities and Climate Action. We connect
+          mental health with climate resilience and community care.
+        </p>
+
+        <div class="ms-hero__actions" data-reveal="fade">
+          <a class="ms-btn ms-btn--primary" href="#story">Learn about the initiative</a>
+          <a class="ms-btn ms-btn--ghost" href="#connect">Connect with us</a>
+        </div>
+      </TextReveal>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ms-hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    overflow: clip;
+    padding-block: calc(var(--sp-6) + 56px) var(--sp-6);
+    --ms-forest: #0d1d15;
+  }
+
+  .ms-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% center;
+  }
+
+  .ms-hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(
+        180deg,
+        transparent 68%,
+        color-mix(in srgb, var(--ms-forest) 85%, transparent) 90%,
+        var(--ms-forest) 100%
+      ),
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--ms-forest) 92%, transparent) 0%,
+        color-mix(in srgb, var(--ms-forest) 70%, transparent) 32%,
+        color-mix(in srgb, var(--ms-forest) 28%, transparent) 56%,
+        transparent 78%
+      );
+  }
+
+  .ms-hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+  .ms-hero__copy {
+    max-width: 40rem;
+  }
+
+  .ms-hero__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" var(--opsz-display), "SOFT" 40;
+    font-size: clamp(2.6rem, 5vw, 4.6rem);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    color: var(--ms-on-dark);
+    margin: var(--sp-2) 0 var(--sp-3);
+    max-width: 15ch;
+  }
+  .ms-hero__lead {
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    color: var(--ms-on-dark-soft);
+    max-width: 46ch;
+  }
+  .ms-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin-top: var(--sp-4);
+  }
+  .ms-hero .ms-btn--ghost {
+    background: color-mix(in srgb, var(--ms-forest) 45%, transparent);
+    border-color: color-mix(in srgb, var(--ms-on-dark) 60%, transparent);
+    color: var(--ms-on-dark);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+  .ms-hero .ms-btn--ghost:hover,
+  .ms-hero .ms-btn--ghost:focus-visible {
+    background: color-mix(in srgb, var(--ms-forest) 68%, transparent);
+    border-color: var(--ms-on-dark);
+  }
+
+  @media (max-width: 720px) {
+    .ms-hero__scrim {
+      background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--ms-forest) 82%, transparent) 0%,
+        color-mix(in srgb, var(--ms-forest) 60%, transparent) 45%,
+        var(--ms-forest) 100%
+      );
+    }
+    .ms-hero__copy {
+      max-width: none;
+    }
+  }
+</style>
+
+<script>
+  function initHeroBg() {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    document
+      .querySelectorAll<HTMLVideoElement>("video.ms-hero__bg")
+      .forEach((v) => {
+        v.playbackRate = 0.5;
+        if (reduce.matches) {
+          v.pause();
+          return;
+        }
+        const sync = (inView: boolean) => {
+          if (inView && !document.hidden) v.play().catch(() => {});
+          else v.pause();
+        };
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach((e) => sync(e.isIntersecting)),
+          { threshold: 0 },
+        );
+        io.observe(v);
+        document.addEventListener("visibilitychange", () =>
+          sync(!document.hidden && v.getBoundingClientRect().bottom > 0),
+        );
+      });
+  }
+  initHeroBg();
+  document.addEventListener("astro:after-swap", initHeroBg);
+</script>

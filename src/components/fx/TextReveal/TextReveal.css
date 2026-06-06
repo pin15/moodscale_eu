@@ -1,0 +1,13 @@
+.ms-line {
+  overflow: hidden;
+  padding-bottom: 0.15em;
+  margin-bottom: -0.15em;
+}
+
+.ms-line > * {
+  will-change: transform;
+}
+
+.ms-text-reveal {
+  display: contents;
+}

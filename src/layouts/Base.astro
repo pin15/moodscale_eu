@@ -1,0 +1,147 @@
+---
+import "@/styles/reset.css";
+import "@/styles/tokens.css";
+import "@/styles/fonts.css";
+import "@/styles/sections.css";
+import MotionProvider from "@/components/motion/MotionProvider.astro";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "MoodScale EU — Reimagining Well-being with Empathy & Technology",
+  description =
+    "MoodScale EU is an initiative connecting mental well-being, climate resilience, civil-society action and the UN Sustainable Development Goals.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.ico" />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/video/hero-bg-poster.jpg"
+      fetchpriority="high"
+    />
+
+    {[3, 4, 5, 8, 10, 13].map((n) => (
+      <link rel="preload" as="image" href={`/assets/svg/sdg/sdg-${n}.svg`} />
+    ))}
+
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+    <MotionProvider />
+
+    <style>
+      img, video, svg, canvas {
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      @keyframes toast-in {
+        0%   { opacity: 0; transform: translateX(-50%) translateY(24px) scale(0.94); filter: blur(4px); }
+        60%  { opacity: 1; transform: translateX(-50%) translateY(-4px) scale(1.01); filter: blur(0); }
+        100% { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1);    filter: blur(0); }
+      }
+      @keyframes toast-out {
+        0%   { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1);    filter: blur(0); }
+        100% { opacity: 0; transform: translateX(-50%) translateY(16px) scale(0.95); filter: blur(3px); }
+      }
+      #crafted-toast          { animation: toast-in  0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+      #crafted-toast.toast-out { animation: toast-out 0.35s ease-in forwards; }
+    </style>
+
+    <div id="crafted-toast" style="
+      display:none;position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+      background:#0d1d15;color:#ffffff;border:1px solid rgba(255,255,255,0.15);
+      padding:1rem 2rem;border-radius:12px;font-size:0.85rem;
+      font-family:system-ui,sans-serif;letter-spacing:0.01em;
+      box-shadow:0 8px 32px rgba(0,0,0,0.5);z-index:9999;white-space:nowrap;
+    ">
+      Crafted by Koush Solanki &mdash; <a href="mailto:koush93@gmail.com" style="color:#ffffff;text-decoration:underline;">koush93@gmail.com</a>
+    </div>
+
+    <script>
+      document.addEventListener('contextmenu', (e) => {
+        const el = e.target as HTMLElement;
+        if (el.tagName === 'IMG' || el.tagName === 'VIDEO' || el.tagName === 'SVG' ||
+            el.tagName === 'CANVAS' || el.closest('img, video, svg, canvas, picture')) {
+          e.preventDefault();
+          return;
+        }
+        const style = window.getComputedStyle(el);
+        if (style.backgroundImage && style.backgroundImage !== 'none') {
+          e.preventDefault();
+        }
+      });
+
+      document.addEventListener('dragstart', (e) => {
+        const el = e.target as HTMLElement;
+        if (el.tagName === 'IMG' || el.tagName === 'VIDEO' || el.closest('img, video')) {
+          e.preventDefault();
+        }
+      });
+
+      function lockImages() {
+        document.querySelectorAll<HTMLImageElement>('img, video').forEach(el => {
+          el.setAttribute('draggable', 'false');
+        });
+      }
+      lockImages();
+      document.addEventListener('astro:after-swap', lockImages);
+    </script>
+
+    <script>
+      (() => {
+        let clicks = 0;
+        let timer: ReturnType<typeof setTimeout>;
+        let hideTimer: ReturnType<typeof setTimeout>;
+        const toast = document.getElementById('crafted-toast')!;
+
+        document.addEventListener('click', (e) => {
+          if (toast.contains(e.target as Node)) return;
+          clicks++;
+          clearTimeout(timer);
+          timer = setTimeout(() => { clicks = 0; }, 600);
+
+          if (clicks >= 4) {
+            clicks = 0;
+            clearTimeout(timer);
+            clearTimeout(hideTimer);
+
+            toast.classList.remove('toast-out');
+            toast.style.display = 'block';
+
+            hideTimer = setTimeout(() => {
+              toast.classList.add('toast-out');
+              setTimeout(() => {
+                toast.style.display = 'none';
+                toast.classList.remove('toast-out');
+              }, 350);
+            }, 3500);
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

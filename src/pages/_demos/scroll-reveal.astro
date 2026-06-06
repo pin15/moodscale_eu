@@ -1,0 +1,134 @@
+---
+import Base from "@/layouts/Base.astro";
+import ScrollReveal from "@/components/fx/ScrollReveal/ScrollReveal.astro";
+
+const sdg = [3, 4, 9, 10, 13, 17];
+---
+
+<Base title="Demo — Scroll Reveal (08)">
+  <main class="demo">
+    <header class="lede">
+      <h1>Scroll Reveal — 08</h1>
+      <p>Scroll down. Each block should arrive once, calm and consistent.</p>
+    </header>
+
+    <ScrollReveal>
+      <section class="block">
+        <h2>fade-up — images / blocks</h2>
+        <div class="art" data-inview="fade-up">opacity 0→1, y 32→0</div>
+      </section>
+
+      <section class="block">
+        <h2>scale-in — icon disc</h2>
+        <div class="disc" data-inview="scale-in" aria-hidden="true">★</div>
+      </section>
+
+      <section class="block">
+        <h2>fade — flat art / map</h2>
+        <div class="art flat" data-inview="fade">opacity only</div>
+      </section>
+
+      <section class="block">
+        <h2>group — SDG tiles (stagger 0.08)</h2>
+        <div class="grid" data-inview="group" data-stagger="0.08">
+          {sdg.map((n) => <div class="tile" data-inview-item>SDG {n}</div>)}
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>fade-up + idle — seated-people scene</h2>
+        <figure class="scene" data-inview="fade-up" data-inview-idle>
+          <span>fade-up, then a barely-perceptible breathe</span>
+        </figure>
+      </section>
+    </ScrollReveal>
+
+    <footer class="spacer">— end —</footer>
+  </main>
+</Base>
+
+<style>
+  .demo {
+    max-width: var(--maxw, 1200px);
+    margin: 0 auto;
+    padding: var(--sp-5, 4rem) var(--sp-3, 1.5rem);
+    color: var(--ms-ink, #243027);
+  }
+  .lede {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  h1 {
+    font-family: var(--font-display, system-ui);
+    font-size: var(--fs-h1, 2.5rem);
+    color: var(--ms-pine, #2f5740);
+  }
+  h2 {
+    font-family: var(--font-display, system-ui);
+    font-size: var(--fs-h3, 1.25rem);
+    color: var(--ms-moss, #4e7355);
+    margin-bottom: var(--sp-2, 1rem);
+  }
+  .block {
+    margin-block: var(--sp-7, 9rem);
+  }
+  .art {
+    display: grid;
+    place-items: center;
+    min-height: 280px;
+    border-radius: var(--radius-lg, 28px);
+    background: var(--ms-mist, #cfe0c8);
+    color: var(--ms-forest, #1e3a2b);
+    font-family: var(--font-body, system-ui);
+  }
+  .art.flat {
+    background: var(--ms-haze, #e7efe0);
+  }
+  .disc {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 2rem;
+    background: var(--ms-mist, #cfe0c8);
+    color: var(--ms-pine, #2f5740);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-2, 1rem);
+  }
+  .tile {
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius, 16px);
+    background: var(--ms-paper, #fbfaf5);
+    border: 1px solid var(--ms-line, rgba(36, 48, 39, 0.12));
+    font-family: var(--font-body, system-ui);
+    color: var(--ms-ink, #243027);
+  }
+  .scene {
+    margin: 0;
+    display: grid;
+    place-items: center;
+    min-height: 320px;
+    border-radius: var(--radius-lg, 28px);
+    background: linear-gradient(
+      160deg,
+      var(--ms-haze, #e7efe0),
+      var(--ms-mist, #cfe0c8)
+    );
+    color: var(--ms-ink-soft, #4a5a4d);
+    font-family: var(--font-body, system-ui);
+  }
+  .spacer {
+    min-height: 40vh;
+    display: grid;
+    place-items: center;
+    color: var(--ms-ink-soft, #4a5a4d);
+  }
+</style>

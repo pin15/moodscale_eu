@@ -1,0 +1,108 @@
+---
+import type { FxComponentProps } from "@/lib/types";
+import styles from "./LandscapeParallax.module.css";
+
+export interface Props extends FxComponentProps {
+  scene: string;
+  mode?: "sliced" | "depth";
+  height?: string;
+  sun?: boolean;
+  intensity?: number;
+}
+
+const {
+  scene,
+  mode = "sliced",
+  height = "100vh",
+  sun = true,
+  intensity = 1,
+  fallbackSrc,
+  staticMode = false,
+  className = "",
+} = Astro.props;
+
+const LAYER_ORDER = ["sky", "mountains", "hills", "lake", "foreground", "figures"] as const;
+
+const imageUrls = import.meta.glob("/src/assets/images/**/*", {
+  eager: true,
+  query: "?url",
+  import: "default",
+}) as Record<string, string>;
+const depthUrls = import.meta.glob("/src/assets/depth/**/*", {
+  eager: true,
+  query: "?url",
+  import: "default",
+}) as Record<string, string>;
+
+const sliceLayers = LAYER_ORDER.map((name) => ({
+  name,
+  src: imageUrls[`/src/assets/images/${scene}/${name}.avif`],
+})).filter((l) => Boolean(l.src));
+
+const flatSrc = imageUrls[`/src/assets/images/${scene}/_flat.avif`] ?? fallbackSrc;
+const depthImage = imageUrls[`/src/assets/images/${scene}.avif`] ?? fallbackSrc;
+const depthMap = depthUrls[`/src/assets/depth/${scene}-depth.png`];
+
+const useDepth = mode === "depth" && Boolean(depthMap);
+const renderSliced = !useDepth && !staticMode && sliceLayers.length > 0;
+---
+
+<section
+  data-fx="landscape-parallax"
+  data-mode={useDepth ? "depth" : "sliced"}
+  data-intensity={intensity}
+  data-static={staticMode ? "true" : null}
+  class:list={[styles.scene, className]}
+  style={`--ms-scene-height:${height}`}
+  aria-hidden="true"
+>
+  {sun && !staticMode && (
+    <div class="ms-sun"><span class="ms-sun-core"></span></div>
+  )}
+
+  {useDepth ? (
+    <>
+      <canvas
+        class={styles.depthCanvas}
+        data-depth-canvas
+        data-image={depthImage}
+        data-depthmap={depthMap}></canvas>
+      <img class={styles.flat} data-depth-fallback src={flatSrc} alt="" loading="lazy" />
+    </>
+  ) : renderSliced ? (
+    sliceLayers.map((l, i) => (
+      <img
+        class={styles.layer}
+        data-layer={l.name}
+        src={l.src}
+        alt=""
+        draggable={false}
+        loading={i === 0 ? "eager" : "lazy"}
+      />
+    ))
+  ) : (
+    <img class={styles.flat} src={flatSrc} alt="" loading="lazy" />
+  )}
+</section>
+
+<script>
+  import { initLandscapeParallax } from "./landscapeParallax";
+  import { onEnterViewport } from "@/components/motion/reducedMotion";
+
+  const teardowns = new WeakMap<HTMLElement, () => void>();
+  document
+    .querySelectorAll<HTMLElement>('[data-fx="landscape-parallax"]:not([data-static])')
+    .forEach((root) => {
+      const stop = onEnterViewport(root, () => {
+        teardowns.set(root, initLandscapeParallax(root));
+      });
+      document.addEventListener(
+        "astro:before-swap",
+        () => {
+          stop();
+          teardowns.get(root)?.();
+        },
+        { once: true },
+      );
+    });
+</script>

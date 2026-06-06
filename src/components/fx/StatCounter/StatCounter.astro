@@ -1,0 +1,72 @@
+---
+import styles from "./StatCounter.module.css";
+import { formatStatValue, type StatFormat } from "./format";
+import type { FxComponentProps } from "@/lib/types";
+
+export interface Stat {
+  to: number;
+  label: string;
+  suffix?: string;
+  prefix?: string;
+  format?: StatFormat;
+  noCount?: boolean;
+}
+
+export interface Props extends Omit<FxComponentProps, "fallbackSrc"> {
+  fallbackSrc?: string;
+  stats: Stat[];
+  onDark?: boolean;
+}
+
+const { stats, staticMode = false, onDark = false, className = "" } = Astro.props;
+
+const rowClass = [styles.row, onDark ? styles.onDark : "", className]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<div class={rowClass}>
+  {
+    stats.map((s) => {
+      const finalText = formatStatValue(s.to, {
+        suffix: s.suffix,
+        prefix: s.prefix,
+        format: s.format,
+      });
+      return (
+        <div
+          class={styles.stat}
+          data-fx="stat-counter"
+          data-static={staticMode || s.noCount ? "true" : undefined}
+        >
+          <span
+            class={`ms-stat__num ${styles.num}`}
+            data-to={s.to}
+            data-suffix={s.suffix}
+            data-prefix={s.prefix}
+            data-format={s.format}
+            aria-hidden="true"
+          >
+            {finalText}
+          </span>
+          <span class={styles.srValue}>{finalText}</span>
+          <span class={`ms-stat__label ${styles.label}`}>{s.label}</span>
+        </div>
+      );
+    })
+  }
+</div>
+
+<script>
+  import { initStatCounter } from "./statCounter";
+
+  const teardowns = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-fx="stat-counter"]'),
+  ).map((el) => initStatCounter(el));
+
+  document.addEventListener(
+    "astro:before-swap",
+    () => teardowns.forEach((t) => t()),
+    { once: true },
+  );
+</script>

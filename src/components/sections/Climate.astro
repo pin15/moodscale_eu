@@ -1,0 +1,173 @@
+---
+import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
+---
+
+<section id="climate" class="ms-section ms-climatebeat" data-theme="dark">
+  <div class="ms-climatebeat__scene" aria-hidden="true">
+    <video
+      class="ms-climatebeat__video"
+      poster="/assets/video/climate-poster.jpg"
+      muted
+      loop
+      playsinline
+      preload="metadata"
+    >
+      <source src="/assets/video/climate-loop.webm" type="video/webm" />
+      <source src="/assets/video/climate-loop.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="ms-container ms-climatebeat__inner">
+    <div class="ms-climatebeat__copy">
+      <TextReveal>
+        <h2 class="ms-climatebeat__title" data-reveal="fade">
+          Mental health &amp; climate
+        </h2>
+        <p class="ms-climatebeat__body" data-reveal="fade">
+          We recognise the growing impact of climate anxiety and environmental
+          stress on well-being. Through nature-based wellness experiences and
+          resilience-building programs, we help people reconnect with themselves,
+          their communities and the planet.
+        </p>
+      </TextReveal>
+    </div>
+
+    <TextReveal>
+      <blockquote class="ms-quote" data-reveal="quote">
+        When we <em>heal</em> people, we <em>heal</em> communities.
+        When we <em>heal</em> communities, we <em>heal</em> the planet.
+      </blockquote>
+    </TextReveal>
+  </div>
+</section>
+
+<style>
+  .ms-climatebeat {
+    position: relative;
+    overflow: clip;
+    padding-block-end: var(--sp-4) !important;
+    min-height: 112svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    --ms-forest: #0d1d15;
+  }
+  .ms-climatebeat__scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .ms-climatebeat__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.38;
+  }
+  .ms-climatebeat__scene::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        180deg,
+        var(--ms-forest) 0%,
+        transparent 16%,
+        transparent 80%,
+        color-mix(in srgb, var(--ms-forest) 88%, transparent) 92%,
+        var(--ms-forest) 100%
+      ),
+      radial-gradient(
+        ellipse 72% 68% at 50% 50%,
+        color-mix(in srgb, var(--ms-forest) 44%, transparent) 0%,
+        color-mix(in srgb, var(--ms-forest) 22%, transparent) 58%,
+        transparent 82%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--ms-forest) 18%, transparent),
+        color-mix(in srgb, var(--ms-forest) 18%, transparent)
+      );
+  }
+
+  .ms-climatebeat__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ms-climatebeat__copy {
+    max-width: 94ch;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .ms-climatebeat__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ms-on-dark);
+    text-shadow:
+      0 2px 4px rgba(8, 16, 11, 0.55),
+      0 6px 28px rgba(8, 16, 11, 0.5);
+    margin: 0 0 var(--sp-2);
+  }
+  .ms-climatebeat__body {
+    color: var(--ms-on-dark);
+    font-size: clamp(1.05rem, 1.3vw, 1.35rem);
+    line-height: var(--lh-body);
+    max-width: 92ch;
+    margin-inline: auto;
+    text-shadow:
+      0 1px 3px rgba(8, 16, 11, 0.55),
+      0 3px 20px rgba(8, 16, 11, 0.5);
+  }
+
+  .ms-quote {
+    margin: clamp(var(--sp-5), 6vw, var(--sp-6)) auto 0;
+    max-width: 32ch;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    line-height: 1.25;
+    color: var(--ms-on-dark);
+    text-shadow:
+      0 2px 6px rgba(8, 16, 11, 0.5),
+      0 6px 30px rgba(8, 16, 11, 0.5);
+    border: 0;
+  }
+  .ms-quote em {
+    font-style: italic;
+    color: var(--ms-leaf);
+  }
+</style>
+
+<script>
+  function initClimateVideo() {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    document
+      .querySelectorAll<HTMLVideoElement>("video.ms-climatebeat__video")
+      .forEach((v) => {
+        if (reduce.matches) {
+          v.pause();
+          return;
+        }
+        const sync = (inView: boolean) => {
+          if (inView && !document.hidden) v.play().catch(() => {});
+          else v.pause();
+        };
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach((e) => sync(e.isIntersecting)),
+          { threshold: 0.1 },
+        );
+        io.observe(v);
+        document.addEventListener("visibilitychange", () =>
+          sync(!document.hidden && v.getBoundingClientRect().bottom > 0),
+        );
+      });
+  }
+  initClimateVideo();
+  document.addEventListener("astro:after-swap", initClimateVideo);
+</script>

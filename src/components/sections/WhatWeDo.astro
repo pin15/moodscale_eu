@@ -1,0 +1,225 @@
+---
+import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
+import ScrollReveal from "@/components/fx/ScrollReveal/ScrollReveal.astro";
+
+const pillars = [
+  { n: "01", title: "Understand emotions", img: "/assets/4-icons/web2/1_MD.png", body: "Self-awareness, assessments and emotional literacy to help people name what they feel, without shame." },
+  { n: "02", title: "Support people", img: "/assets/4-icons/web2/2_MD.png", body: "Therapist-led guidance, counselling pathways and care connections for individuals and families." },
+  { n: "03", title: "Strengthen communities", img: "/assets/4-icons/web2/3_MD.png", body: "Workshops, workplace well-being and resilience programs for organisations and civil society." },
+  { n: "04", title: "Reconnect with nature", img: "/assets/4-icons/web2/4_MD.png", body: "Nature retreats, digital detox and climate-aware well-being practices for healthier minds and planet." },
+];
+---
+
+<section id="what-we-do" class="ms-section ms-what" data-theme="light">
+  <div class="ms-container">
+    <div class="ms-what__intro">
+      <div class="ms-what__headcol">
+        <TextReveal>
+          <p class="ms-eyebrow ms-what__eyebrow" data-reveal="fade">What we do</p>
+          <h2 class="ms-what__title" data-reveal="lines">
+            Building a happier world,<br /> one emotion at a&nbsp;time.
+          </h2>
+        </TextReveal>
+      </div>
+
+      <div class="ms-what__leadcol">
+        <TextReveal>
+          <p class="ms-what__lead" data-reveal="fade">
+            MoodScale EU is not a product showcase. It is an initiative to
+            support mental well-being as part of a wider sustainability and
+            climate-conscious future.
+          </p>
+          <p class="ms-what__lead" data-reveal="fade">
+            Inspired by the spirit of global climate conversations such as COP,
+            we focus on the human side of sustainability: climate anxiety,
+            emotional resilience, inclusion and nature-connected healing.
+          </p>
+        </TextReveal>
+      </div>
+    </div>
+
+    <ScrollReveal>
+      <ol class="ms-pillars" data-inview="group" data-stagger="0.1">
+        {
+          pillars.map((p) => (
+            <li class="ms-pillar" data-inview-item>
+              <img
+                class="ms-pillar__icon"
+                src={p.img}
+                width="1254"
+                height="1254"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="ms-pillar__head">
+                <span class="ms-pillar__n" aria-hidden="true">{p.n}</span>
+                <h3 class="ms-pillar__title">{p.title}</h3>
+              </div>
+              <p class="ms-pillar__body">{p.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </ScrollReveal>
+  </div>
+</section>
+
+<style>
+  :global(.ms-section.ms-what) {
+    padding-block-start: var(--sp-4) !important;
+  }
+
+  .ms-what__intro {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: clamp(var(--sp-4), 6vw, var(--sp-7));
+    align-items: end;
+    margin-bottom: clamp(var(--sp-5), 7vw, var(--sp-7));
+  }
+  @media (max-width: 860px) {
+    .ms-what__intro {
+      grid-template-columns: 1fr;
+      gap: var(--sp-3);
+      align-items: start;
+    }
+  }
+
+  .ms-what__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .ms-what__eyebrow::before {
+    content: "";
+    inline-size: 28px;
+    block-size: 1px;
+    background: var(--ms-moss);
+  }
+
+  .ms-what__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" var(--opsz-display), "SOFT" 40;
+    font-size: clamp(2.5rem, 5.2vw, 4.4rem);
+    line-height: 1.04;
+    letter-spacing: -0.018em;
+    color: var(--ms-pine);
+    margin: var(--sp-2) 0 0;
+  }
+
+  .ms-what__leadcol {
+    display: grid;
+    gap: var(--sp-2);
+  }
+  .ms-what__lead {
+    color: var(--ms-ink-soft);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    max-width: 40ch;
+  }
+
+  .ms-pillars {
+    list-style: none;
+    margin: 0;
+    padding: clamp(var(--sp-4), 4vw, var(--sp-5)) 0 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(var(--sp-3), 3vw, var(--sp-5));
+    border-top: 1px solid var(--ms-line);
+  }
+  .ms-pillar {
+    display: grid;
+    gap: var(--sp-2);
+    align-content: start;
+  }
+  .ms-pillar__icon {
+    display: block;
+    inline-size: clamp(118px, 13vw, 176px);
+    block-size: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    margin-block-end: var(--sp-1);
+  }
+  .ms-pillar__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+  .ms-pillar__n {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ms-sage);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    flex: none;
+  }
+  .ms-pillar__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.25rem, 1.9vw, 1.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--ms-pine);
+    margin: 0;
+    background-image: linear-gradient(var(--ms-moss), var(--ms-moss));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1.5px;
+    transition: background-size var(--dur-quick) var(--ease-gentle);
+    width: fit-content;
+  }
+  .ms-pillar__body {
+    color: var(--ms-ink-soft);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    margin: 0;
+    max-width: 34ch;
+  }
+
+  .ms-pillar:hover .ms-pillar__title {
+    background-size: 100% 1.5px;
+  }
+  .ms-pillar:hover .ms-pillar__n {
+    color: var(--ms-moss);
+  }
+
+  @media (max-width: 980px) {
+    .ms-pillars {
+      grid-template-columns: repeat(2, 1fr);
+      gap: clamp(var(--sp-4), 6vw, var(--sp-6)) clamp(var(--sp-3), 5vw, var(--sp-5));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .ms-pillars {
+      grid-template-columns: 1fr;
+      gap: var(--sp-4);
+    }
+    .ms-pillar {
+      grid-template-columns: 84px 1fr;
+      column-gap: var(--sp-3);
+      row-gap: 0.4rem;
+      align-items: start;
+    }
+    .ms-pillar__icon {
+      inline-size: 84px;
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      align-self: start;
+      margin-block-end: 0;
+    }
+    .ms-pillar__head {
+      grid-column: 2;
+    }
+    .ms-pillar__body {
+      grid-column: 2;
+      max-width: none;
+    }
+  }
+</style>

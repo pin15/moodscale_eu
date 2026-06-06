@@ -1,0 +1,44 @@
+.root {
+  position: relative;
+  display: block;
+  width: 100%;
+  line-height: 0;
+  isolation: isolate;
+}
+
+.fallback {
+  display: block;
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 0;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-slow, 1600ms) var(--ease-gentle, ease);
+  will-change: opacity;
+  background: transparent;
+}
+
+.canvas[data-ready="true"] {
+  opacity: 1;
+}
+
+.canvas > :global(canvas) {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas {
+    display: none;
+  }
+}

@@ -1,0 +1,88 @@
+---
+import WaterShimmer from "@/components/fx/WaterShimmer/WaterShimmer.astro";
+
+const waterSvg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600">
+  <defs>
+    <linearGradient id="w" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe0c8"/>
+      <stop offset="0.28" stop-color="#7fa6a0"/>
+      <stop offset="0.6" stop-color="#3f6f6b"/>
+      <stop offset="1" stop-color="#244a47"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="600" fill="url(#w)"/>
+  <g stroke="#eef3e8" stroke-opacity="0.35" stroke-width="2">
+    <line x1="0" y1="120" x2="1000" y2="120"/>
+    <line x1="0" y1="210" x2="1000" y2="210"/>
+    <line x1="0" y1="300" x2="1000" y2="300"/>
+    <line x1="0" y1="390" x2="1000" y2="390"/>
+    <line x1="0" y1="470" x2="1000" y2="470"/>
+    <line x1="0" y1="540" x2="1000" y2="540"/>
+  </g>
+</svg>`;
+const water = `data:image/svg+xml,${encodeURIComponent(waterSvg)}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WaterShimmer — demo</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: #f6f3ea;
+        color: #243027;
+        font: 16px/1.6 system-ui, sans-serif;
+        padding: 2.5rem clamp(1rem, 4vw, 4rem) 6rem;
+      }
+      h1 {
+        font-size: clamp(1.5rem, 3vw, 2.25rem);
+      }
+      p {
+        max-width: 60ch;
+        color: #4a5a4d;
+      }
+      .frame {
+        max-width: 900px;
+        margin: 2rem 0;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 24px 60px -30px rgba(36, 48, 39, 0.5);
+      }
+      .frame.small {
+        max-width: 360px;
+      }
+      code {
+        background: #e7efe0;
+        padding: 0.1em 0.4em;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>WaterShimmer</h1>
+    <p>
+      Watch the horizontal highlight lines: they drift slowly near the bottom (near water) and
+      stay calm toward the top (far water) — the depth cue. Toggle your OS
+      <em>reduce&nbsp;motion</em> setting to confirm it freezes completely static.
+    </p>
+
+    <div class="frame">
+      <WaterShimmer fallbackSrc={water} scale={6} duration={14} nearStart={0.45} />
+    </div>
+
+    <p>Stronger ripple (<code>scale=8</code>), faster drift (<code>duration=8</code>):</p>
+    <div class="frame small">
+      <WaterShimmer fallbackSrc={water} scale={8} duration={8} nearStart={0.3} />
+    </div>
+
+    <p><code>staticMode</code> — forced static frame, no overlay or animation:</p>
+    <div class="frame small">
+      <WaterShimmer fallbackSrc={water} staticMode />
+    </div>
+  </body>
+</html>

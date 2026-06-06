@@ -1,0 +1,122 @@
+---
+import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
+import ScrollReveal from "@/components/fx/ScrollReveal/ScrollReveal.astro";
+import AnimatedIcon from "@/components/fx/AnimatedIcon/AnimatedIcon.astro";
+
+const steps = [
+  { icon: "/assets/lottie/smart-matching.lottie", glyph: "✦", title: "Smart matching", body: "Thoughtful algorithms help people find the right support and notice emotional patterns over time." },
+  { icon: "/assets/lottie/emotional-journey.lottie", glyph: "◐", title: "Emotional journey", body: "A gentle, longitudinal view of how someone feels — so progress is something you can see and trust." },
+  { icon: "/assets/lottie/hands-heart.lottie", glyph: "♡", title: "Human-centered", body: "Technology never replaces warmth. Every pathway ends with real, confidential human care." },
+];
+---
+
+<section id="how-it-works" class="ms-section ms-how" data-theme="dark">
+  <div class="ms-container">
+    <div class="ms-how__head">
+      <TextReveal>
+        <p class="ms-eyebrow" data-reveal="fade">Our approach</p>
+        <h2 class="ms-h2" data-reveal="lines">Technology with empathy.</h2>
+        <p class="ms-how__intro" data-reveal="fade">
+          Smart algorithms can help people find the right support, notice
+          emotional patterns and understand their journey — but technology should
+          never replace warmth, trust or human connection.
+        </p>
+      </TextReveal>
+    </div>
+
+    <ScrollReveal>
+      <div class="ms-how__grid" data-inview="group" data-stagger="0.09">
+        {
+          steps.map((s, i) => (
+            <article class="ms-step" data-inview-item>
+              <AnimatedIcon src={s.icon} glyph={s.glyph} label={s.title} size={56} />
+              <span class="ms-step__n">{`0${i + 1}`}</span>
+              <h3 class="ms-h3">{s.title}</h3>
+              <p>{s.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </ScrollReveal>
+
+    <TextReveal>
+      <ul class="ms-checklist" data-reveal="checklist">
+        <li>Designed for dignity, confidentiality and emotional safety.</li>
+        <li>Grounded in evidence-based care, assessments and behaviour science.</li>
+        <li>Created for people, workplaces, non-profits and civil societies.</li>
+      </ul>
+    </TextReveal>
+  </div>
+</section>
+
+<style>
+  .ms-how__head {
+    max-width: 60ch;
+    margin-bottom: var(--sp-5);
+  }
+  .ms-how .ms-h2,
+  .ms-how .ms-h3 {
+    color: var(--ms-on-dark);
+  }
+  .ms-hand {
+    margin: var(--sp-1) 0 var(--sp-2);
+    --hand-size: clamp(120px, 15vw, 200px);
+  }
+  .ms-how__intro {
+    color: var(--ms-on-dark-soft);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+  }
+
+  .ms-how__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-4);
+  }
+  .ms-step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-1);
+  }
+  .ms-step__n {
+    font-family: var(--font-display);
+    color: var(--ms-leaf);
+    font-weight: 700;
+    font-size: var(--fs-small);
+    margin-top: var(--sp-1);
+  }
+  .ms-step p {
+    color: var(--ms-on-dark-soft);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+  }
+
+  .ms-checklist {
+    list-style: none;
+    margin: var(--sp-5) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--sp-2);
+    max-width: 60ch;
+  }
+  .ms-checklist li {
+    position: relative;
+    padding-left: 2rem;
+    color: var(--ms-on-dark);
+    font-size: var(--fs-body);
+  }
+  .ms-checklist li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--ms-leaf);
+    font-weight: 700;
+  }
+
+  @media (max-width: 860px) {
+    .ms-how__grid {
+      grid-template-columns: 1fr;
+      gap: var(--sp-3);
+    }
+  }
+</style>

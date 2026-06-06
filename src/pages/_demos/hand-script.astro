@@ -1,0 +1,73 @@
+---
+import Base from "@/layouts/Base.astro";
+import HandScript from "@/components/fx/HandScript/HandScript.astro";
+---
+
+<Base title="Demo — HandScript">
+  <main class="demo">
+    <p class="hint">Scroll down — each script word draws itself once as it enters view.</p>
+
+    <section class="block">
+      <h2>Discover your <HandScript src="/src/assets/svg/script/empathy.svg" /></h2>
+    </section>
+
+    <section class="block">
+      <h2>Growing <HandScript src="/src/assets/svg/script/together.svg" color="var(--ms-pine)" duration={1.8} /></h2>
+    </section>
+
+    <section class="block dark">
+      <h2>Towards <HandScript src="/src/assets/svg/script/fulfilling-lives.svg" color="var(--ms-leaf)" /></h2>
+    </section>
+
+    <section class="block">
+      <h2>Building a <HandScript src="/src/assets/svg/script/happier-future.svg" /></h2>
+    </section>
+
+    <section class="block">
+      <h3>staticMode — renders fully written, no animation</h3>
+      <HandScript src="/src/assets/svg/script/empathy.svg" staticMode />
+    </section>
+  </main>
+</Base>
+
+<style>
+  .demo {
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding: var(--sp-4);
+  }
+  .hint {
+    color: var(--ms-ink-soft);
+    font-family: var(--font-body);
+  }
+  .block {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--sp-2);
+  }
+  .block h2 {
+    font-family: var(--font-display);
+    font-size: var(--fs-h1);
+    color: var(--ms-pine);
+  }
+  .block h3 {
+    font-family: var(--font-body);
+    font-size: var(--fs-h3);
+    color: var(--ms-ink-soft);
+  }
+  .block :global([data-fx="hand-script"]) {
+    width: clamp(220px, 36vw, 420px);
+    vertical-align: -0.15em;
+  }
+  .dark {
+    background: var(--ms-forest);
+    color: var(--ms-on-dark);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-4);
+  }
+  .dark h2 {
+    color: var(--ms-on-dark);
+  }
+</style>

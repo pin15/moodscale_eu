@@ -1,0 +1,68 @@
+---
+import StatCounter, { type Stat } from "@/components/fx/StatCounter/StatCounter.astro";
+
+const glance: Stat[] = [
+  { to: 80, suffix: "%+", label: "Women-Led Team" },
+  { to: 2023, format: "plain", label: "Founded in India" },
+  { to: 12000, label: "People Reached" },
+];
+
+const badges: Stat[] = [
+  { to: 2, label: "Offices · Pune + Bonn" },
+  { to: 4, label: "Brand Pillars" },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo · Stat Counter (doc 12)</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: var(--font-body, system-ui, sans-serif);
+        background: var(--ms-cream, #f6f3ea);
+        color: var(--ms-ink, #243027);
+      }
+      section {
+        max-width: var(--maxw, 1200px);
+        margin: 0 auto;
+        padding: clamp(3rem, 10vh, 9rem) 1.5rem;
+      }
+      .spacer {
+        height: 90vh;
+        display: grid;
+        place-items: center;
+        color: var(--ms-ink-soft, #4a5a4d);
+      }
+      h1 {
+        font-family: var(--font-display, system-ui, sans-serif);
+        color: var(--ms-pine, #2f5740);
+      }
+      .dark {
+        background: var(--ms-forest, #1e3a2b);
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h1>Stat Counter — demo</h1>
+      <p class="spacer">↓ scroll down so each row enters the viewport ↓</p>
+    </section>
+
+    <section>
+      <p class="eyebrow">MoodScale at a Glance</p>
+      <StatCounter stats={glance} />
+    </section>
+
+    <section class="dark">
+      <StatCounter stats={badges} onDark />
+    </section>
+
+    <section>
+      <p class="eyebrow">staticMode (no animation — final value immediately)</p>
+      <StatCounter stats={glance} staticMode />
+    </section>
+  </body>
+</html>

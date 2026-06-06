@@ -1,0 +1,192 @@
+---
+import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
+import StatCounter from "@/components/fx/StatCounter/StatCounter.astro";
+import ConnectionMap from "@/components/fx/ConnectionMap/ConnectionMap.astro";
+---
+
+<section id="story" class="ms-section ms-story" data-theme="dark">
+  <div class="ms-story__scene" aria-hidden="true">
+    <video
+      class="ms-story__video"
+      poster="/assets/video/mountains-poster.jpg"
+      muted
+      loop
+      playsinline
+      preload="metadata"
+    >
+      <source src="/assets/video/mountains-loop.webm" type="video/webm" />
+      <source src="/assets/video/mountains-loop.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="ms-container ms-story__grid">
+    <div class="ms-story__copy">
+      <TextReveal>
+        <p class="ms-eyebrow" data-reveal="fade">Our Story</p>
+        <h2 class="ms-h2" data-reveal="lines">
+          Born from a simple belief: mental well-being should feel human,
+          accessible and connected to the world we live in.
+        </h2>
+        <p class="ms-body" data-reveal="fade">
+          MoodScale began in India with the idea that understanding emotions can
+          help people, teams and communities live with more clarity and
+          resilience.
+        </p>
+        <p class="ms-body" data-reveal="fade">
+          For the EU initiative, we connect mental health, thoughtful technology,
+          nature retreats, climate resilience and civil-society partnerships.
+        </p>
+
+        <div class="ms-story__stats">
+          <StatCounter
+            onDark
+            stats={[
+              { to: 2023, format: "plain", noCount: true, label: "Founded in India" },
+              { to: 80, suffix: "%+", label: "Women-led team" },
+            ]}
+          />
+        </div>
+      </TextReveal>
+    </div>
+
+    <div class="ms-story__map">
+      <ConnectionMap variant="india" />
+      <p class="ms-story__map-cap">Pune, India · founded 2023</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ms-story {
+    position: relative;
+    overflow: clip;
+    min-height: 100svh;
+    --ms-forest: #0d1d15;
+  }
+  .ms-story__scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .ms-story__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+    opacity: 0.2;
+  }
+  .ms-story__scene::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        180deg,
+        var(--ms-forest) 0%,
+        transparent 14%,
+        transparent 78%,
+        color-mix(in srgb, var(--ms-forest) 88%, transparent) 92%,
+        var(--ms-forest) 100%
+      ),
+      linear-gradient(
+        90deg,
+        var(--ms-forest) 0%,
+        color-mix(in srgb, var(--ms-forest) 30%, transparent) 55%,
+        transparent 100%
+      );
+  }
+
+  .ms-story__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--sp-5);
+    align-items: center;
+  }
+
+  .ms-story .ms-h2 {
+    color: var(--ms-on-dark);
+  }
+  .ms-story .ms-body {
+    color: var(--ms-on-dark-soft);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    max-width: 50ch;
+  }
+  .ms-hand {
+    margin: 0 0 var(--sp-2);
+    --hand-size: clamp(110px, 14vw, 180px);
+  }
+
+  .ms-story__stats {
+    margin-top: var(--sp-4);
+  }
+
+  .ms-story__map {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding-bottom: clamp(1.75rem, 4vw, 2.75rem);
+  }
+  .ms-story__map :global(.ms-indiamap svg) {
+    filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.5));
+  }
+  .ms-story__map :global(.ms-map__legend) {
+    display: none;
+  }
+  .ms-story__map-cap {
+    position: absolute;
+    left: 34%;
+    bottom: 0;
+    transform: translateX(-50%);
+    margin: 0;
+    color: var(--ms-on-dark-soft);
+    font-size: clamp(0.95rem, 1.1vw, 1.15rem);
+    letter-spacing: 0.01em;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 860px) {
+    .ms-story__grid {
+      grid-template-columns: 1fr;
+      gap: var(--sp-4);
+    }
+    .ms-story__map {
+      max-width: 360px;
+      margin-inline: auto;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  function initStoryVideo() {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    document
+      .querySelectorAll<HTMLVideoElement>("video.ms-story__video")
+      .forEach((v) => {
+        if (reduce.matches) {
+          v.pause();
+          return;
+        }
+        const sync = (inView: boolean) => {
+          if (inView && !document.hidden) v.play().catch(() => {});
+          else v.pause();
+        };
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach((e) => sync(e.isIntersecting)),
+          { threshold: 0.1 },
+        );
+        io.observe(v);
+        document.addEventListener("visibilitychange", () =>
+          sync(!document.hidden && v.getBoundingClientRect().bottom > 0),
+        );
+      });
+  }
+  initStoryVideo();
+  document.addEventListener("astro:after-swap", initStoryVideo);
+</script>

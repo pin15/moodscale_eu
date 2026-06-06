@@ -1,0 +1,68 @@
+---
+import Base from "@/layouts/Base.astro";
+import WavyDivider from "@/components/fx/WavyDivider/WavyDivider.astro";
+---
+
+<Base title="Demo — Wavy Divider">
+  <style>
+    .demo-section {
+      padding: var(--sp-6) var(--sp-3);
+      text-align: center;
+    }
+    .demo-section h2 {
+      font-family: var(--font-display);
+      font-size: var(--fs-h2);
+      margin: 0 0 var(--sp-2);
+    }
+    .demo-cream {
+      background: var(--ms-cream);
+      color: var(--ms-ink);
+    }
+    .demo-forest {
+      background: var(--ms-forest);
+      color: var(--ms-on-dark);
+    }
+    .demo-moss {
+      background: var(--ms-moss);
+      color: var(--ms-on-dark);
+    }
+    .demo-tall {
+      min-height: 90vh;
+      display: grid;
+      place-content: center;
+    }
+  </style>
+
+  <section class="demo-section demo-cream demo-tall">
+    <h2>Ambient morph</h2>
+    <p>The wave below slowly oscillates between alternate shapes, forever.</p>
+  </section>
+
+  <WavyDivider mode="ambient" fill="var(--ms-forest)" />
+
+  <section class="demo-section demo-forest demo-tall">
+    <h2>Forest section</h2>
+    <p>The wave's fill matches this background, so the seam is invisible.</p>
+  </section>
+
+  <WavyDivider mode="ambient" fill="var(--ms-moss)" flip />
+
+  <section class="demo-section demo-moss demo-tall">
+    <h2>Flipped hill</h2>
+    <p>Solid fill on top, wave dips down — bridging forest into moss.</p>
+  </section>
+
+  <WavyDivider mode="scroll" fill="var(--ms-cream)" />
+
+  <section class="demo-section demo-cream demo-tall">
+    <h2>Scroll morph</h2>
+    <p>Scroll this boundary in and out of view — the wave reshapes on scroll.</p>
+  </section>
+
+  <WavyDivider mode="ambient" fill="var(--ms-forest)" staticMode />
+
+  <section class="demo-section demo-forest demo-tall">
+    <h2>Static (staticMode)</h2>
+    <p>No animation — the resting wave shape only.</p>
+  </section>
+</Base>

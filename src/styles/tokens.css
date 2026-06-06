@@ -1,0 +1,50 @@
+:root {
+  --ms-forest:  #1E3A2B;
+  --ms-pine:    #2F5740;
+  --ms-moss:    #4E7355;
+  --ms-sage:    #7C9A6E;
+  --ms-leaf:    #9CBE84;
+  --ms-mist:    #CFE0C8;
+  --ms-haze:    #E7EFE0;
+
+  --ms-cream:    #F6F3EA;
+  --ms-paper:    #FBFAF5;
+  --ms-ink:      #243027;
+  --ms-ink-soft: #4A5A4D;
+  --ms-line:     rgba(36, 48, 39, 0.12);
+
+  --ms-on-dark:      #EEF3E8;
+  --ms-on-dark-soft: #B9CBB0;
+
+  --ms-sun-color: 245, 233, 200;
+
+  --font-serif:   "Fraunces", Georgia, "Times New Roman", serif;
+  --font-display: var(--font-serif);
+  --font-body:    "Hanken Grotesk", system-ui, sans-serif;
+  --font-script:  "Dancing Script", cursive;
+  --opsz-display: 96;
+
+  --fs-hero:  clamp(2.75rem, 6vw, 5rem);
+  --fs-h1:    clamp(2rem, 4.5vw, 3.25rem);
+  --fs-h2:    clamp(1.5rem, 3vw, 2.25rem);
+  --fs-h3:    1.25rem;
+  --fs-body:  1.0625rem;
+  --fs-small: 0.875rem;
+  --lh-body:  1.7;
+
+  --sp-1: .5rem; --sp-2: 1rem; --sp-3: 1.5rem; --sp-4: 2.5rem;
+  --sp-5: 4rem;  --sp-6: 6rem; --sp-7: 9rem;
+  --radius:    16px;
+  --radius-lg: 28px;
+  --maxw:      1200px;
+
+  --ease-calm:        cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-gentle:      cubic-bezier(0.40, 0, 0.20, 1);
+  --ease-soft-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+
+  --dur-reveal: 1000ms;
+  --dur-quick:  450ms;
+  --dur-slow:   1600ms;
+
+  --stagger: 90ms;
+}

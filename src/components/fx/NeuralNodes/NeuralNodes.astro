@@ -1,0 +1,59 @@
+---
+import styles from "./NeuralNodes.module.css";
+
+export interface Props {
+  fallbackSrc?: string;
+  staticMode?: boolean;
+  maskSrc?: string;
+  blendMode?: "screen" | "lighten" | "normal";
+  class?: string;
+}
+
+const {
+  fallbackSrc,
+  staticMode = false,
+  maskSrc = "/assets/svg/head-silhouette.svg",
+  blendMode = "screen",
+  class: className = "",
+} = Astro.props;
+
+const maskVar = `--nn-mask: url("${maskSrc}");`;
+---
+
+<div
+  class:list={[styles.root, className]}
+  data-fx="neural-nodes"
+  data-fx-static={staticMode ? "1" : undefined}
+  style={maskVar}
+  aria-hidden="true"
+>
+  {
+    fallbackSrc && (
+      <img class={styles.fallback} src={fallbackSrc} alt="" loading="lazy" decoding="async" />
+    )
+  }
+  <canvas class={styles.canvas} style={`mix-blend-mode:${blendMode};`}></canvas>
+</div>
+
+<script>
+  import { initNeuralNodes } from "./neuralNodes";
+
+  function boot() {
+    document.querySelectorAll<HTMLElement>('[data-fx="neural-nodes"]').forEach((root) => {
+      if (root.dataset.fxBooted === "1") return;
+      root.dataset.fxBooted = "1";
+      const teardown = initNeuralNodes(root);
+      root.dataset.fxReady = "1";
+      const cleanup = () => {
+        teardown();
+        delete root.dataset.fxBooted;
+        delete root.dataset.fxReady;
+        document.removeEventListener("astro:before-swap", cleanup);
+      };
+      document.addEventListener("astro:before-swap", cleanup);
+    });
+  }
+
+  boot();
+  document.addEventListener("astro:after-swap", boot);
+</script>

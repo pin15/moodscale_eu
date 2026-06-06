@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" aria-hidden="true"
+     class="ms-branch-svg" data-corner="sprig">
+  <!-- small accent sprig for tucking into a card corner or beside a heading -->
+  <path class="ms-stem" d="M16 104 C 36 84 50 64 58 36"
+        stroke="#5b4a32" stroke-width="3" stroke-linecap="round" fill="none" opacity=".75"/>
+  <g class="ms-leaf" transform="translate(30 80) rotate(-30)"><g class="ms-sway"><use href="#ms-sprig-leaf"/></g></g>
+  <g class="ms-leaf" transform="translate(44 60) rotate(10)"><g class="ms-sway"><use href="#ms-sprig-leaf"/></g></g>
+  <g class="ms-leaf" transform="translate(54 40) rotate(36) scale(.85)"><g class="ms-sway"><use href="#ms-sprig-leaf"/></g></g>
+  <g class="ms-leaf" transform="translate(58 30) rotate(0) scale(.7)"><g class="ms-sway"><use href="#ms-sprig-leaf"/></g></g>
+  <defs>
+    <g id="ms-sprig-leaf">
+      <path d="M0 8 C -10 0 -10 -20 0 -30 C 10 -20 10 0 0 8 Z" fill="#7c9a6e"/>
+      <path d="M0 6 L0 -26" stroke="#3f6b40" stroke-width="1" opacity=".5"/>
+    </g>
+  </defs>
+</svg>

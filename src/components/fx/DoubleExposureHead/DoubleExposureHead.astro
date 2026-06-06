@@ -1,0 +1,58 @@
+---
+import Scene from "./Scene.tsx";
+import styles from "./DoubleExposureHead.module.css";
+
+export interface Props {
+  fallbackSrc: string;
+  staticMode?: boolean;
+  className?: string;
+
+  sceneSrc: string;
+  depthSrc: string;
+  maskSrc: string;
+  intensity?: number;
+  facing?: "left" | "right";
+
+  alt?: string;
+}
+
+const {
+  fallbackSrc,
+  staticMode = false,
+  className = "",
+  sceneSrc,
+  depthSrc,
+  maskSrc,
+  intensity = 0.06,
+  facing = "left",
+  alt = "A human profile filled with an inner landscape",
+} = Astro.props;
+---
+
+<div
+  class:list={[styles.root, className]}
+  data-fx="double-exposure-head"
+  data-facing={facing}
+>
+  <img
+    class={styles.fallback}
+    src={fallbackSrc}
+    alt={alt}
+    decoding="async"
+    fetchpriority="high"
+    draggable="false"
+  />
+
+  {
+    !staticMode && (
+      <Scene
+        client:visible
+        sceneSrc={sceneSrc}
+        depthSrc={depthSrc}
+        maskSrc={maskSrc}
+        intensity={intensity}
+        facing={facing}
+      />
+    )
+  }
+</div>

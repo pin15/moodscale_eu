@@ -1,0 +1,14 @@
+import { chromium } from "playwright";
+const selector = process.argv[2] || "#impact";
+const out = process.argv[3] || "/tmp/wide.png";
+const base = process.argv[4] || "http://localhost:4321/";
+const browser = await chromium.launch({ channel: "chrome" });
+const page = await browser.newPage({ viewport: { width: 1680, height: 1050 }, deviceScaleFactor: 1.5 });
+await page.goto(base, { waitUntil: "networkidle" });
+await page.evaluate(() => document.fonts.ready);
+const el = page.locator(selector).first();
+await el.scrollIntoViewIfNeeded();
+await page.waitForTimeout(1800);
+await el.screenshot({ path: out });
+console.log("wide shot", selector, "->", out);
+await browser.close();

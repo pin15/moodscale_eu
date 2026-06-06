@@ -1,0 +1,90 @@
+[data-fx="connection-map"] {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+[data-fx="connection-map"] svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.ms-map__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-3);
+  justify-content: center;
+  margin-top: var(--sp-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  color: var(--ms-ink-soft);
+}
+.ms-map__legend b {
+  color: var(--ms-pine);
+  font-weight: 600;
+}
+
+.ms-map__city {
+  fill: var(--ms-on-dark-soft);
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.ms-map__city--lead { fill: var(--ms-on-dark); }
+
+.ms-dots circle { fill: var(--ms-sage); }
+
+#ms-arc {
+  fill: none;
+  stroke: var(--ms-leaf);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.ms-arc-flow {
+  fill: none;
+  stroke: var(--ms-moss);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 4 9;
+  opacity: 0;
+  animation: ms-arc-drift 2.6s linear infinite;
+  animation-play-state: paused;
+}
+@keyframes ms-arc-drift {
+  to { stroke-dashoffset: -26; }
+}
+
+.ms-pin__core { fill: var(--ms-paper); }
+.ms-pin__dot { fill: var(--ms-pine); }
+
+.ms-pin__ring {
+  fill: none;
+  stroke: var(--ms-leaf);
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: ms-ping 2.4s var(--ease-soft-in-out) infinite;
+  animation-play-state: paused;
+}
+.ms-pin__ring--2 { animation-delay: 0.8s; }
+.ms-pin__ring--3 { animation-delay: 1.6s; }
+
+@keyframes ms-ping {
+  0%   { transform: scale(0.4); opacity: 0.8; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+[data-fx="connection-map"].is-onscreen .ms-arc-flow,
+[data-fx="connection-map"].is-onscreen .ms-pin__ring {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-pin__ring { display: none; }
+  .ms-arc-flow { display: none; }
+}

@@ -1,0 +1,191 @@
+---
+import DottedMap from "dotted-map";
+
+interface Props {
+  fromLabel?: string;
+  toLabel?: string;
+  from?: { lat: number; lng: number };
+  to?: { lat: number; lng: number };
+}
+
+const {
+  fromLabel = "Bonn, Germany",
+  toLabel = "Pune, India",
+  from = { lat: 50.7374, lng: 7.0982 },
+  to = { lat: 18.5204, lng: 73.8567 },
+} = Astro.props;
+
+const map = new DottedMap({
+  height: 120,
+  grid: "vertical",
+  projection: { name: "equirectangular" },
+});
+
+map.addPin({ lat: from.lat, lng: from.lng, data: "from" });
+map.addPin({ lat: to.lat, lng: to.lng, data: "to" });
+
+const points = map.getPoints();
+const W = map.image.width;
+const H = map.image.height;
+
+const a = points.find((p) => p.data === "from")!;
+const b = points.find((p) => p.data === "to")!;
+
+const dx = b.x - a.x;
+const peak = Math.min(a.y, b.y) - Math.max(6, Math.abs(dx) * 0.16);
+const c1x = a.x + dx * 0.36;
+const c2x = a.x + dx * 0.82;
+const routeD = `M ${b.x.toFixed(1)} ${b.y.toFixed(1)} C ${c2x.toFixed(1)} ${(peak + 3).toFixed(1)}, ${c1x.toFixed(1)} ${peak.toFixed(1)}, ${a.x.toFixed(1)} ${a.y.toFixed(1)}`;
+---
+
+<section class="global-map-section">
+  <svg
+    class="connection-map"
+    viewBox={`0 0 ${W} ${H}`}
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label={`Route from ${fromLabel} to ${toLabel} on a world map`}
+  >
+    <defs>
+      <radialGradient id="markerGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+        <stop offset="45%" stop-color="#ffffff" stop-opacity="0.55" />
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+      </radialGradient>
+
+      <filter id="softGlow" x="-200%" y="-200%" width="500%" height="500%">
+        <feGaussianBlur stdDeviation="0.9" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+
+    <g class="world-dots">
+      {points.map((p) => <circle cx={p.x} cy={p.y} />)}
+    </g>
+
+    <path id="routePath" class="route-base" d={routeD} />
+    <path class="route-active" d={routeD} pathLength="1" />
+
+    <circle r="0.9" class="moving-pulse" filter="url(#softGlow)">
+      <animateMotion dur="3.2s" repeatCount="indefinite" rotate="auto">
+        <mpath href="#routePath" />
+      </animateMotion>
+    </circle>
+
+    <g class="marker" transform={`translate(${a.x} ${a.y})`}>
+      <circle r="4.4" fill="url(#markerGlow)" />
+      <circle r="1.15" fill="#ffffff" />
+      <circle r="0.5" fill="#ffffff" />
+    </g>
+    <g class="marker marker-to" transform={`translate(${b.x} ${b.y})`}>
+      <circle r="5" fill="url(#markerGlow)" />
+      <circle r="1.3" fill="#ffffff" />
+      <circle r="0.55" fill="#ffffff" />
+    </g>
+
+    <text class="city-label" x={(a.x - 5).toFixed(1)} y={(a.y + 1).toFixed(1)} text-anchor="end">{fromLabel}</text>
+    <text class="city-label" x={(b.x - 5).toFixed(1)} y={(b.y + 4).toFixed(1)} text-anchor="end">{toLabel}</text>
+  </svg>
+</section>
+
+<style>
+  .global-map-section {
+    position: relative;
+    width: 100%;
+    background: transparent;
+  }
+
+  .connection-map {
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: block;
+    -webkit-mask-image: radial-gradient(118% 86% at 50% 48%, #000 58%, transparent 100%);
+    mask-image: radial-gradient(118% 86% at 50% 48%, #000 58%, transparent 100%);
+  }
+
+  .world-dots circle {
+    r: 0.42px;
+    fill: #ffffff;
+    opacity: 0.28;
+  }
+  .world-dots {
+    animation: mapBreath 5.5s ease-in-out infinite;
+  }
+
+  .route-base {
+    stroke: rgba(255, 255, 255, 0.3);
+    stroke-width: 0.5;
+    fill: none;
+    filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.3));
+  }
+  .route-active {
+    stroke: #ffffff;
+    stroke-width: 0.6;
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
+    animation: drawRoute 3.2s ease-in-out infinite;
+  }
+  .moving-pulse {
+    fill: #ffffff;
+    opacity: 0.95;
+  }
+
+  .marker {
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+    animation: pulseMarker 2.4s ease-in-out infinite;
+  }
+  .marker-to {
+    animation-delay: 0.6s;
+  }
+
+  .city-label {
+    fill: #ffffff;
+    font-size: 3.6px;
+    font-weight: 700;
+    font-family: var(--font-body, Inter, system-ui, sans-serif);
+    letter-spacing: 0.01em;
+    paint-order: stroke;
+    stroke: rgba(0, 0, 0, 0.4);
+    stroke-width: 0.9px;
+    stroke-linejoin: round;
+  }
+
+  @keyframes drawRoute {
+    0% { stroke-dashoffset: 1; opacity: 0.1; }
+    35% { stroke-dashoffset: 0; opacity: 1; }
+    72% { stroke-dashoffset: 0; opacity: 1; }
+    100% { stroke-dashoffset: -1; opacity: 0.2; }
+  }
+  @keyframes pulseMarker {
+    0%, 100% { opacity: 0.75; }
+    50% { opacity: 1; }
+  }
+  @keyframes mapBreath {
+    0%, 100% { opacity: 0.62; }
+    50% { opacity: 0.9; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .world-dots,
+    .route-active,
+    .marker,
+    .moving-pulse {
+      animation: none;
+    }
+    .route-active {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    .moving-pulse {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,85 @@
+---
+import type { FxComponentProps } from "@/lib/types";
+import styles from "./AnimatedIcon.module.css";
+
+export interface Props extends FxComponentProps {
+  src: string;
+  trigger?: "scroll" | "hover" | "both";
+  disc?: boolean;
+  size?: number;
+  label: string;
+  glyph?: string;
+}
+
+const {
+  src,
+  trigger = "both",
+  disc = true,
+  size = 56,
+  label,
+  glyph,
+  fallbackSrc,
+  staticMode = false,
+  className,
+} = Astro.props;
+---
+
+<div
+  class:list={[styles.icon, className]}
+  data-fx="animated-icon"
+  data-src={src}
+  data-trigger={trigger}
+  data-static-mode={staticMode ? "true" : undefined}
+  role="img"
+  aria-label={label}
+  style={`--ms-icon-size:${size}px`}
+>
+  {disc && <span class={styles.disc} data-inview="scale-in" aria-hidden="true"></span>}
+
+  {glyph && <span class={styles.glyph} aria-hidden="true">{glyph}</span>}
+
+  <canvas class={styles.canvas} aria-hidden="true"></canvas>
+
+  {
+    fallbackSrc && (
+      <img
+        class={styles.fallback}
+        src={fallbackSrc}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        data-fallback
+        hidden
+      />
+    )
+  }
+</div>
+
+<script>
+  import { initAnimatedIcon } from "./animatedIcon.client";
+
+  const teardowns = new WeakMap<HTMLElement, () => void>();
+
+  function mount() {
+    document
+      .querySelectorAll<HTMLElement>('[data-fx="animated-icon"]')
+      .forEach((root) => {
+        if (teardowns.has(root)) return;
+        teardowns.set(root, initAnimatedIcon(root));
+      });
+  }
+
+  function unmount() {
+    document
+      .querySelectorAll<HTMLElement>('[data-fx="animated-icon"]')
+      .forEach((root) => {
+        teardowns.get(root)?.();
+        teardowns.delete(root);
+      });
+  }
+
+  mount();
+  document.addEventListener("astro:after-swap", mount);
+  document.addEventListener("astro:before-swap", unmount);
+</script>

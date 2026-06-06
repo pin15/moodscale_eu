@@ -1,0 +1,43 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<div data-fx="scroll-reveal" class={className}>
+  <slot />
+</div>
+
+<script>
+  import { initScrollReveal } from "./ScrollReveal";
+
+  const teardowns = new WeakMap<HTMLElement, () => void>();
+
+  function boot() {
+    document
+      .querySelectorAll<HTMLElement>('[data-fx="scroll-reveal"]')
+      .forEach((root) => {
+        if (teardowns.has(root)) return;
+        teardowns.set(root, initScrollReveal(root));
+      });
+  }
+
+  function teardownAll() {
+    document
+      .querySelectorAll<HTMLElement>('[data-fx="scroll-reveal"]')
+      .forEach((root) => {
+        teardowns.get(root)?.();
+        teardowns.delete(root);
+      });
+  }
+
+  boot();
+
+  document.addEventListener("astro:before-swap", teardownAll);
+  document.addEventListener("astro:after-swap", boot);
+</script>
+
+<style>
+  @import "./ScrollReveal.module.css";
+</style>

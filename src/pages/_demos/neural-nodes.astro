@@ -1,0 +1,88 @@
+---
+import NeuralNodes from "@/components/fx/NeuralNodes/NeuralNodes.astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo — Neural-Node Particle Network</title>
+    <style is:global>
+      :root {
+        --ms-forest: #1e3a2b;
+        --ms-pine: #2f5740;
+        --ms-sage: #7c9a6e;
+        --ms-leaf: #9cbe84;
+        --ms-mist: #cfe0c8;
+        --ms-on-dark: #eef3e8;
+        --ms-on-dark-soft: #b9cbb0;
+        --font-body: "Hanken Grotesk", system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: var(--font-body);
+        color: var(--ms-on-dark);
+        background: var(--ms-forest);
+      }
+      .wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 6rem 1.5rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 3rem;
+        align-items: center;
+      }
+      h1 { font-size: 2rem; font-weight: 600; }
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 0.8rem;
+        color: var(--ms-leaf);
+        margin: 0 0 0.75rem;
+      }
+      p.lede { color: var(--ms-on-dark-soft); line-height: 1.7; max-width: 46ch; }
+      .panel { max-width: 420px; margin-inline: auto; }
+      .label { font-size: 0.85rem; color: var(--ms-on-dark-soft); text-align: center; margin-top: 1rem; }
+    </style>
+  </head>
+  <body>
+    <section class="wrap">
+      <div class="grid">
+        <div>
+          <p class="eyebrow">Technology</p>
+          <h1>Psychology, mapped by machine.</h1>
+          <p class="lede">
+            A quiet constellation of synapses at rest — nodes drift, links
+            whisper between neighbours, and a soft pulse crosses the network
+            every few seconds. Calm by design.
+          </p>
+        </div>
+        <div class="panel">
+          <NeuralNodes blendMode="screen" />
+          <p class="label">Live network</p>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:6rem;">
+        <div class="panel">
+          <NeuralNodes blendMode="screen" staticMode={true} />
+          <p class="label">staticMode — reduced-motion frame (no loop)</p>
+        </div>
+        <div>
+          <p class="eyebrow">Accessibility</p>
+          <h1>One still frame, no assault of motion.</h1>
+          <p class="lede">
+            Under <code>prefers-reduced-motion: reduce</code> (or
+            <code>staticMode</code>), the network paints a single settled frame
+            and the animation loop never starts.
+          </p>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+.scene {
+  --ms-sun-color: 245, 233, 200;
+
+  position: relative;
+  width: 100%;
+  height: var(--ms-scene-height, 100vh);
+  overflow: hidden;
+  background: var(--ms-forest);
+  isolation: isolate;
+}
+
+.layer,
+.flat,
+.depthCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  backface-visibility: hidden;
+}
+
+.flat {
+  z-index: 1;
+}
+
+.depthCanvas {
+  z-index: 1;
+  display: none;
+}
+
+.scene :global(.ms-sun) {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 42vmin;
+  height: 42vmin;
+  margin-left: -21vmin;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.scene :global(.ms-sun-core) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(var(--ms-sun-color), 0.9) 0%,
+    rgba(var(--ms-sun-color), 0.35) 35%,
+    transparent 70%
+  );
+  filter: blur(8px);
+  mix-blend-mode: screen;
+  animation: ms-sun-breathe 9s var(--ease-soft-in-out) infinite;
+}
+
+@keyframes ms-sun-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene :global(.ms-sun-core) {
+    animation: none;
+    opacity: 0.9;
+  }
+}

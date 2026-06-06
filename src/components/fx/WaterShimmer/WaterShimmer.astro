@@ -1,0 +1,139 @@
+---
+import type { FxComponentProps } from "@/lib/types";
+
+export interface Props extends FxComponentProps {
+  fallbackSrc: string;
+  alt?: string;
+  scale?: number;
+  duration?: number;
+  nearStart?: number;
+  id?: string;
+}
+
+const {
+  fallbackSrc,
+  alt = "",
+  scale = 6,
+  duration = 14,
+  nearStart = 0.45,
+  staticMode = false,
+  className = "",
+  id,
+} = Astro.props;
+
+const uid = id ?? `ms-water-${Math.random().toString(36).slice(2, 9)}`;
+const filterId = `${uid}-filter`;
+
+const fade = Math.max(0, Math.min(100, Math.round(nearStart * 100)));
+const mask = `linear-gradient(to bottom, transparent 0%, transparent ${fade}%, #000 100%)`;
+
+const decorative = alt === "";
+---
+
+<div class:list={["ms-water", className]} data-fx="water-shimmer" data-static={staticMode ? "" : null} id={uid}>
+  <img
+    class="ms-water__base"
+    src={fallbackSrc}
+    alt={alt}
+    aria-hidden={decorative ? "true" : null}
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+
+  {!staticMode && (
+    <>
+      <img
+        class="ms-water__shimmer"
+        src={fallbackSrc}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        draggable="false"
+        style={`filter:url(#${filterId});-webkit-mask-image:${mask};mask-image:${mask}`}
+      />
+
+      <svg class="ms-water__defs" width="0" height="0" aria-hidden="true" focusable="false">
+        <filter id={filterId} x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.012 0.04"
+            numOctaves="2"
+            seed="4"
+            stitchTiles="stitch"
+            result="noise"
+          >
+            <animate
+              attributeName="baseFrequency"
+              dur={`${duration}s`}
+              values="0.012 0.04; 0.014 0.05; 0.012 0.04"
+              calcMode="spline"
+              keyTimes="0;0.5;1"
+              keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
+              repeatCount="indefinite"
+            />
+          </feTurbulence>
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale={scale}
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </svg>
+    </>
+  )}
+</div>
+
+<style>
+  .ms-water {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    isolation: isolate;
+    line-height: 0;
+  }
+
+  .ms-water > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ms-water__shimmer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ms-water__shimmer {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { initWaterShimmer } from "./waterShimmer.client";
+
+  const teardowns = new Map<HTMLElement, () => void>();
+
+  function mount() {
+    document.querySelectorAll<HTMLElement>('[data-fx="water-shimmer"]').forEach((root) => {
+      if (teardowns.has(root)) return;
+      teardowns.set(root, initWaterShimmer(root));
+    });
+  }
+
+  function unmount() {
+    teardowns.forEach((teardown) => teardown());
+    teardowns.clear();
+  }
+
+  mount();
+  document.addEventListener("astro:after-swap", mount);
+  document.addEventListener("astro:before-swap", unmount);
+</script>

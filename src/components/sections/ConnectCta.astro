@@ -1,0 +1,389 @@
+---
+import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
+import StatCounter from "@/components/fx/StatCounter/StatCounter.astro";
+import GlobalConnectionMap from "@/components/GlobalConnectionMap.astro";
+---
+
+<section id="connect" class="ms-section ms-connect" data-theme="dark">
+  <img
+    class="ms-connect__mountains"
+    src="/assets/images/Mountains_for_contact_a.png"
+    alt=""
+    aria-hidden="true"
+    width="1024"
+    height="1536"
+    loading="lazy"
+    decoding="async"
+  />
+  <img
+    class="ms-connect__leaves"
+    src="/assets/images/MD_M_L_Contact_a.png"
+    alt=""
+    aria-hidden="true"
+    width="941"
+    height="1672"
+    loading="lazy"
+    decoding="async"
+  />
+
+  <div class="ms-container">
+    <header class="ms-connect__head">
+      <TextReveal>
+        <p class="ms-eyebrow" data-reveal="fade">MoodScale at a glance</p>
+        <span class="ms-connect__sprig" data-reveal="fade" aria-hidden="true">
+          <svg viewBox="0 0 24 18" fill="currentColor">
+            <path d="M12 16.5 C12 11.5 9.2 8.2 5 7 C5.8 12 8 15.4 12 16.5 Z" />
+            <path d="M12 16.5 C12 11.5 14.8 8.2 19 7 C18.2 12 16 15.4 12 16.5 Z" />
+            <path d="M12 16.8 V7.4" stroke="currentColor" stroke-width="1" fill="none" stroke-linecap="round" />
+          </svg>
+        </span>
+        <h2 class="ms-h2 ms-connect__title" data-reveal="lines">
+          Let's build a happier world,<br class="ms-connect__break" /> for
+          civil society and the planet.
+        </h2>
+      </TextReveal>
+    </header>
+
+    <div class="ms-connect__stats">
+      <StatCounter
+        onDark
+        stats={[
+          { to: 2023, format: "plain", noCount: true, label: "Founded in India" },
+          { to: 80, suffix: "%+", label: "Women-led team" },
+          { to: 6, label: "UN SDGs supported" },
+          { to: 2, label: "Cities: Pune & Bonn" },
+        ]}
+      />
+    </div>
+
+    <div class="ms-connect__map" role="img" aria-label="MoodScale offices: Pune, India and Bonn, Germany, connected">
+      <GlobalConnectionMap fromLabel="Bonn, Germany" toLabel="Pune, India" />
+    </div>
+
+    <div class="ms-connect__card">
+      <span class="ms-connect__icon" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor"
+             stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M7 25 C7 14 14 8 25 7 C24 18 17 24 7 25 Z" />
+          <path d="M8 24 C13 19 18 14 23 10" />
+        </svg>
+      </span>
+
+      <p class="ms-connect__lead">
+        We partner with civil societies and non-profit organisations. Visit
+        us at the <strong>Bonn Climate Conference 2026.</strong>
+      </p>
+
+      <dl class="ms-connect__details">
+        <div class="ms-connect__row">
+          <dt>Web</dt>
+          <dd><a href="https://moodscale.eu">moodscale.eu</a></dd>
+        </div>
+        <div class="ms-connect__row">
+          <dt>Email</dt>
+          <dd><a href="mailto:contact@moodscale.eu">contact@moodscale.eu</a></dd>
+        </div>
+        <div class="ms-connect__row">
+          <dt>Offices</dt>
+          <dd>Bonn, Germany · Pune, India</dd>
+        </div>
+      </dl>
+
+      <a class="ms-connect__cta" href="mailto:contact@moodscale.eu">
+        Connect with us
+        <svg class="ms-connect__arrow" viewBox="0 0 20 12" fill="none"
+             stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M1 6h17M13 1l5 5-5 5" />
+        </svg>
+      </a>
+    </div>
+
+    <footer class="ms-connect__brand">
+      <strong>MoodScale EU</strong>
+      <p>
+        An initiative for mental well-being, climate resilience and the UN
+        Sustainable Development Goals.
+      </p>
+    </footer>
+  </div>
+</section>
+
+<style>
+  .ms-section.ms-connect {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 68% at 50% 52%, rgba(120, 150, 90, 0.13), transparent 60%),
+      radial-gradient(80% 48% at 82% 26%, rgba(184, 210, 126, 0.06), transparent 55%),
+      radial-gradient(120% 30% at 50% 57%, rgba(0, 0, 0, 0.55) 0%, transparent 100%),
+      linear-gradient(180deg, #0d1d15 0%, #0a1a12 48%, #061610 100%);
+  }
+  .ms-section.ms-connect {
+    padding-block-start: clamp(var(--sp-2), 2vw, var(--sp-3)) !important;
+    padding-block-end: clamp(var(--sp-4), 4vw, var(--sp-5));
+  }
+  .ms-connect .ms-container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ms-connect__mountains,
+  .ms-connect__leaves {
+    position: absolute;
+    z-index: 0;
+    block-size: auto;
+    pointer-events: none;
+    user-select: none;
+  }
+  .ms-connect__mountains {
+    right: 0;
+    top: 20%;
+    block-size: 38%;
+    inline-size: auto;
+    opacity: 0.8;
+    transform: scaleX(1);
+    -webkit-mask-image: linear-gradient(to left, #000 50%, transparent 96%), linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to left, #000 50%, transparent 96%), linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-composite: intersect;
+    -webkit-mask-composite: source-in;
+  }
+  .ms-connect__leaves {
+    left: -8px;
+    top: -8px;
+    inline-size: clamp(210px, 23vw, 380px);
+    opacity: 0.3;
+    -webkit-mask-image: radial-gradient(135% 130% at 8% 12%, #000 26%, transparent 74%);
+    mask-image: radial-gradient(135% 130% at 8% 12%, #000 26%, transparent 74%);
+  }
+
+  .ms-connect__brand {
+    margin-top: clamp(var(--sp-4), 4vw, var(--sp-5));
+    padding-top: clamp(var(--sp-3), 3vw, var(--sp-4));
+    border-top: 1px solid color-mix(in srgb, var(--ms-on-dark) 12%, transparent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--sp-2);
+  }
+  .ms-connect__sprig--sm {
+    margin: 0;
+  }
+  .ms-connect__sprig--sm svg {
+    width: 20px;
+  }
+  .ms-connect__brand strong {
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    color: var(--ms-on-dark);
+  }
+  .ms-connect__brand p {
+    margin: 0;
+    max-width: none;
+    white-space: nowrap;
+    color: var(--ms-on-dark-soft);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+  }
+
+  .ms-connect__head {
+    max-width: 100%;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .ms-connect .ms-eyebrow {
+    margin-bottom: var(--sp-1);
+  }
+  .ms-connect__sprig {
+    display: block;
+    color: var(--ms-leaf);
+    margin: 0 auto var(--sp-2);
+  }
+  .ms-connect__sprig svg {
+    display: block;
+    width: 26px;
+    height: auto;
+    margin-inline: auto;
+  }
+  .ms-connect__title {
+    color: var(--ms-on-dark);
+    font-size: clamp(1.8rem, 3vw, 3.2rem);
+    line-height: 1.15;
+  }
+
+  .ms-connect__stats {
+    margin-block: clamp(var(--sp-2), 2vw, var(--sp-3));
+    padding-block: var(--sp-3);
+    border-block: 1px solid color-mix(in srgb, var(--ms-on-dark) 16%, transparent);
+    zoom: 0.85;
+  }
+  .ms-connect__stats > :global(div) {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .ms-connect__stats :global([data-fx="stat-counter"]) {
+    align-items: center;
+    text-align: center;
+    padding-inline: var(--sp-3);
+    border-left: 1px solid color-mix(in srgb, var(--ms-on-dark) 14%, transparent);
+  }
+  .ms-connect__stats :global(.num) {
+    font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+  }
+  .ms-connect__stats :global([data-fx="stat-counter"]:first-child) {
+    border-left: none;
+  }
+
+  .ms-connect__map {
+    margin-block: clamp(var(--sp-2), 2vw, var(--sp-3));
+    zoom: 0.85;
+  }
+
+  .ms-connect__card {
+    zoom: 0.85;
+    display: flex;
+    align-items: center;
+    gap: clamp(var(--sp-3), 3vw, var(--sp-5));
+    padding: clamp(var(--sp-3), 3vw, var(--sp-4)) clamp(var(--sp-3), 3.5vw, var(--sp-5));
+    border: 1px solid color-mix(in srgb, var(--ms-on-dark) 16%, transparent);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--ms-on-dark) 3%, transparent);
+  }
+
+  .ms-connect__icon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    inline-size: 64px;
+    block-size: 64px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--ms-on-dark) 20%, transparent);
+    color: var(--ms-leaf);
+  }
+  .ms-connect__icon svg {
+    width: 30px;
+    height: auto;
+  }
+
+  .ms-connect__lead {
+    flex: 1 1 14rem;
+    max-width: 22rem;
+    margin: 0;
+    color: var(--ms-on-dark);
+    font-size: var(--fs-body);
+    line-height: 1.55;
+  }
+  .ms-connect__lead strong {
+    font-weight: 600;
+    color: var(--ms-leaf);
+  }
+
+  .ms-connect__details {
+    display: flex;
+    gap: clamp(var(--sp-3), 3vw, var(--sp-5));
+    margin: 0;
+    padding-left: clamp(var(--sp-3), 3vw, var(--sp-5));
+    border-left: 1px solid color-mix(in srgb, var(--ms-on-dark) 14%, transparent);
+  }
+  .ms-connect__row {
+    display: grid;
+    gap: 0.3rem;
+  }
+  .ms-connect__row dt {
+    color: var(--ms-on-dark-soft);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  .ms-connect__row dd {
+    margin: 0;
+    color: var(--ms-on-dark);
+    font-size: var(--fs-body);
+    line-height: 1.3;
+    text-wrap: nowrap;
+  }
+  .ms-connect__row:last-child dd {
+    text-wrap: pretty;
+    max-width: 11rem;
+  }
+  .ms-connect__row dd a {
+    color: var(--ms-leaf);
+    text-decoration: none;
+    transition: color var(--dur-quick) var(--ease-gentle);
+  }
+  .ms-connect__row dd a:hover,
+  .ms-connect__row dd a:focus-visible {
+    color: var(--ms-on-dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .ms-connect__cta {
+    flex: 0 0 auto;
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.8rem 1.4rem;
+    border-radius: 999px;
+    background: var(--ms-mist);
+    color: var(--ms-forest);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color var(--dur-quick) var(--ease-gentle),
+      color var(--dur-quick) var(--ease-gentle);
+  }
+  .ms-connect__cta:hover,
+  .ms-connect__cta:focus-visible {
+    background: var(--ms-leaf);
+  }
+  .ms-connect__arrow {
+    width: 18px;
+    height: auto;
+    transition: transform var(--dur-quick) var(--ease-gentle);
+  }
+  .ms-connect__cta:hover .ms-connect__arrow,
+  .ms-connect__cta:focus-visible .ms-connect__arrow {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 960px) {
+    .ms-connect__card {
+      flex-wrap: wrap;
+    }
+    .ms-connect__lead {
+      flex-basis: 100%;
+      max-width: none;
+    }
+    .ms-connect__details {
+      padding-left: 0;
+      border-left: none;
+    }
+    .ms-connect__cta {
+      margin-left: 0;
+    }
+  }
+  @media (max-width: 640px) {
+    .ms-connect__break {
+      display: none;
+    }
+    .ms-connect__stats > :global(div) {
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: var(--sp-4);
+    }
+    .ms-connect__stats :global([data-fx="stat-counter"]) {
+      border-left: none;
+    }
+    .ms-connect__stats :global([data-fx="stat-counter"]:nth-child(even)) {
+      border-left: 1px solid color-mix(in srgb, var(--ms-on-dark) 14%, transparent);
+    }
+    .ms-connect__details {
+      flex-direction: column;
+      gap: var(--sp-2);
+    }
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+import type { FxComponentProps } from "@/lib/types";
+
+export interface Props extends Partial<FxComponentProps> {
+  mode?: "ambient" | "scroll";
+  fill?: string;
+  height?: number;
+  flip?: boolean;
+}
+
+const {
+  mode = "ambient",
+  fill = "var(--ms-forest)",
+  height = 120,
+  flip = false,
+  staticMode = false,
+  className,
+} = Astro.props;
+---
+
+<div
+  class:list={["ms-divider", { "ms-divider--flip": flip }, className]}
+  data-fx="wavy-divider"
+  data-mode={mode}
+  data-static={staticMode ? "true" : undefined}
+  style={`--ms-wave-fill:${fill};--ms-wave-h:${height}px;`}
+  aria-hidden="true"
+>
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none" focusable="false">
+    <path
+      class="ms-divider__wave"
+      d="M0,40 C360,90 1080,0 1440,50 L1440,120 L0,120 Z"
+    ></path>
+  </svg>
+</div>
+
+<style>
+  .ms-divider {
+    display: block;
+    width: 100%;
+    height: var(--ms-wave-h, 120px);
+    line-height: 0;
+    margin-bottom: -1px;
+    pointer-events: none;
+  }
+
+  .ms-divider svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ms-divider__wave {
+    fill: var(--ms-wave-fill, var(--ms-forest));
+  }
+
+  .ms-divider--flip svg {
+    transform: scaleY(-1);
+  }
+  .ms-divider--flip {
+    margin-top: -1px;
+    margin-bottom: 0;
+  }
+</style>
+
+<script>
+  import { initWavyDivider } from "./wavyDivider";
+
+  const teardowns = new Map<HTMLElement, () => void>();
+
+  function mount() {
+    document
+      .querySelectorAll<HTMLElement>('[data-fx="wavy-divider"]')
+      .forEach((el) => {
+        if (teardowns.has(el)) return;
+        teardowns.set(el, initWavyDivider(el));
+      });
+  }
+
+  function unmount() {
+    teardowns.forEach((fn) => fn());
+    teardowns.clear();
+  }
+
+  mount();
+  document.addEventListener("astro:after-swap", mount);
+  document.addEventListener("astro:before-swap", unmount);
+</script>

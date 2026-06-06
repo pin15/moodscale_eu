@@ -1,0 +1,68 @@
+---
+import DoubleExposureHead from "@/components/fx/DoubleExposureHead/DoubleExposureHead.astro";
+
+const assets = {
+  fallbackSrc: "/src/assets/images/head-fallback.avif",
+  sceneSrc: "/src/assets/images/head-scene.avif",
+  depthSrc: "/src/assets/depth/head-scene-depth.png",
+  maskSrc: "/src/assets/svg/head-silhouette.png",
+};
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo · Double-Exposure Head</title>
+    <style is:global>
+      :root {
+        --ms-cream: #f6f3ea;
+        --ms-ink-soft: #4a5a4d;
+        --dur-slow: 1600ms;
+        --ease-gentle: cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      body {
+        margin: 0;
+        min-height: 200vh;
+        background: var(--ms-cream);
+        font-family: system-ui, sans-serif;
+        color: var(--ms-ink-soft);
+        display: grid;
+        place-items: start center;
+        padding: 12vh 1rem;
+        gap: 2rem;
+      }
+      .stage {
+        width: min(560px, 90vw);
+      }
+      p.note {
+        max-width: 48ch;
+        text-align: center;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="note">
+      Move your cursor over the head — the inner scene should parallax with a
+      gentle <em>lag</em>, far elements moving less than near ones. With no
+      pointer input it keeps breathing. Toggle OS “reduce motion” to confirm the
+      static composite shows with zero animation.
+    </p>
+
+    <div class="stage">
+      <DoubleExposureHead
+        fallbackSrc={assets.fallbackSrc}
+        sceneSrc={assets.sceneSrc}
+        depthSrc={assets.depthSrc}
+        maskSrc={assets.maskSrc}
+        intensity={0.06}
+        facing="left"
+        alt="Demo — a human profile filled with an inner landscape"
+      />
+    </div>
+
+    <p class="note">Scroll: <code>uScroll</code> adds a faint vertical lean.</p>
+  </body>
+</html>

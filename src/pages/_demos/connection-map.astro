@@ -1,0 +1,28 @@
+---
+import Base from "@/layouts/Base.astro";
+import ConnectionMap from "@/components/fx/ConnectionMap/ConnectionMap.astro";
+---
+
+<Base title="Demo — Connection Map">
+  <main style="max-width:900px;margin:0 auto;padding:6rem 1.5rem;display:grid;gap:6rem;">
+    <section>
+      <p class="eyebrow">Contact — “Build a Happier World”</p>
+      <h2>World map · Pune ↔ Bonn arc</h2>
+      <p>Pins drop in, then the arc draws between India and Germany; a subtle dash drift suggests the connection.</p>
+      <ConnectionMap variant="world" fallbackSrc="/src/assets/svg/world-dotted.svg" />
+    </section>
+
+    <section>
+      <p class="eyebrow">Our Story</p>
+      <h2>India map · founding radar pin</h2>
+      <p>A radar pulse blooms outward from the founding location as the section arrives, then settles.</p>
+      <ConnectionMap variant="india" fallbackSrc="/src/assets/svg/india.svg" />
+    </section>
+
+    <section>
+      <h2>staticMode (animation disabled)</h2>
+      <p>Final composed state, identical to what a reduced-motion visitor sees.</p>
+      <ConnectionMap variant="world" staticMode fallbackSrc="/src/assets/svg/world-dotted.svg" />
+    </section>
+  </main>
+</Base>

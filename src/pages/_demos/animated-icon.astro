@@ -1,0 +1,95 @@
+---
+import AnimatedIcon from "@/components/fx/AnimatedIcon/AnimatedIcon.astro";
+
+const icons: Array<{ src: string; label: string }> = [
+  { src: "/src/assets/lottie/smart-matching.lottie", label: "Smart matching" },
+  { src: "/src/assets/lottie/emotional-journey.lottie", label: "Emotional journey" },
+  { src: "/src/assets/lottie/hands-heart.lottie", label: "Compassion" },
+  { src: "/src/assets/lottie/brain.lottie", label: "Psychology" },
+  { src: "/src/assets/lottie/ai-chip.lottie", label: "Technology" },
+  { src: "/src/assets/lottie/lotus.lottie", label: "Calm" },
+  { src: "/src/assets/lottie/globe.lottie", label: "Global reach" },
+  { src: "/src/assets/lottie/shield.lottie", label: "Secure & confidential" },
+  { src: "/src/assets/lottie/growth-chart.lottie", label: "Measurable growth" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AnimatedIcon — demo (doc 11)</title>
+    <style is:global>
+      :root {
+        --ms-mist: #cfe0c8;
+        --ms-cream: #f6f3ea;
+        --ms-ink: #243027;
+        --ms-ink-soft: #4a5a4d;
+        --font-body: "Hanken Grotesk", system-ui, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 4rem 2rem;
+        background: var(--ms-cream);
+        color: var(--ms-ink);
+        font-family: var(--font-body);
+        line-height: 1.7;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .spacer {
+        height: 80vh;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 2rem;
+        max-width: 960px;
+      }
+      .cell {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .cell span {
+        color: var(--ms-ink-soft);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>AnimatedIcon — scroll past the spacer to see each icon draw in.</h1>
+    <p>
+      Hover any icon to replay it. Toggle OS “reduce motion” to verify the static
+      resting-frame behaviour.
+    </p>
+
+    <div class="spacer"></div>
+
+    <div class="grid">
+      {
+        icons.map((i) => (
+          <div class="cell">
+            <AnimatedIcon src={i.src} label={i.label} fallbackSrc={i.src.replace("/lottie/", "/svg/").replace(".lottie", ".svg")} />
+            <span>{i.label}</span>
+          </div>
+        ))
+      }
+    </div>
+
+    <h2>trigger="hover" (no scroll-draw)</h2>
+    <div class="grid">
+      <div class="cell">
+        <AnimatedIcon src="/src/assets/lottie/lotus.lottie" label="Calm (hover only)" trigger="hover" />
+        <span>hover only</span>
+      </div>
+      <div class="cell">
+        <AnimatedIcon src="/src/assets/lottie/brain.lottie" label="Psychology (no disc, 80px)" trigger="both" disc={false} size={80} />
+        <span>no disc · 80px</span>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+  </body>
+</html>

@@ -1,0 +1,151 @@
+---
+const links = [
+  { href: "#story", label: "Story" },
+  { href: "#what-we-do", label: "What We Do" },
+  { href: "#impact", label: "Impact" },
+  { href: "#connect", label: "Connect" },
+];
+---
+
+<header class="ms-nav" data-nav>
+  <div class="ms-nav__inner">
+    <a class="ms-nav__brand" href="#top" aria-label="MoodScale: Discover Your Feelings">
+      <img
+        src="/assets/moodscale-green-logo-cropped.png"
+        alt="MoodScale"
+        width="150"
+        height="34"
+        decoding="async"
+      />
+    </a>
+
+    <nav class="ms-nav__links" aria-label="Sections">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+
+    <a class="ms-nav__cta" href="#connect">Join the initiative</a>
+  </div>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>("[data-nav]");
+  if (nav) {
+    let last = window.scrollY;
+    let ticking = false;
+
+    const update = () => {
+      const y = window.scrollY;
+      const goingDown = y > last && y > 120;
+      nav.classList.toggle("is-hidden", goingDown);
+      nav.classList.toggle("is-scrolled", y > 24);
+      last = y;
+      ticking = false;
+    };
+
+    addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
+  }
+</script>
+
+<style>
+  .ms-nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    transition: transform var(--dur-quick) var(--ease-gentle),
+      background-color var(--dur-quick) var(--ease-gentle);
+    transform: translateY(0);
+  }
+  .ms-nav.is-hidden {
+    transform: translateY(-100%);
+  }
+  .ms-nav.is-hidden::before {
+    opacity: 0;
+  }
+  .ms-nav::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 130px;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.24) 45%,
+      transparent 100%
+    );
+    -webkit-backdrop-filter: blur(9px);
+    backdrop-filter: blur(9px);
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 42%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 42%, transparent 100%);
+    pointer-events: none;
+    z-index: -1;
+    transition: opacity var(--dur-quick) var(--ease-gentle);
+  }
+
+  .ms-nav__inner {
+    max-width: var(--maxw);
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-1) var(--sp-3);
+  }
+
+  .ms-nav__brand {
+    display: inline-flex;
+    align-items: center;
+    margin-right: auto;
+  }
+  .ms-nav__brand img {
+    height: 34px;
+    width: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+  }
+
+  .ms-nav__links {
+    display: flex;
+    gap: var(--sp-3);
+  }
+  .ms-nav__links a {
+    color: var(--ms-on-dark);
+    text-decoration: none;
+    font-size: var(--fs-small);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: color var(--dur-quick) var(--ease-gentle);
+  }
+  .ms-nav__links a:hover,
+  .ms-nav__links a:focus-visible {
+    color: var(--ms-leaf);
+  }
+
+  .ms-nav__cta {
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--ms-on-dark);
+    background: var(--ms-pine);
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: background-color var(--dur-quick) var(--ease-gentle);
+  }
+  .ms-nav__cta:hover,
+  .ms-nav__cta:focus-visible {
+    background: var(--ms-forest);
+  }
+
+  @media (max-width: 720px) {
+    .ms-nav__links {
+      display: none;
+    }
+  }
+</style>
