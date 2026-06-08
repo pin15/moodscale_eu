@@ -10,12 +10,14 @@ import ConnectionMap from "@/components/fx/ConnectionMap/ConnectionMap.astro";
       class="ms-story__video"
       poster="/assets/video/mountains-poster.jpg"
       muted
+      autoplay
       loop
       playsinline
+      webkit-playsinline
       preload="metadata"
     >
-      <source src="/assets/video/mountains-loop.webm" type="video/webm" />
       <source src="/assets/video/mountains-loop.mp4" type="video/mp4" />
+      <source src="/assets/video/mountains-loop.webm" type="video/webm" />
     </video>
   </div>
 
@@ -144,7 +146,7 @@ import ConnectionMap from "@/components/fx/ConnectionMap/ConnectionMap.astro";
     transform: translateX(-50%);
     margin: 0;
     color: var(--ms-on-dark-soft);
-    font-size: clamp(0.95rem, 1.1vw, 1.15rem);
+    font-size: var(--fs-small);
     letter-spacing: 0.01em;
     text-align: center;
     white-space: nowrap;
@@ -164,29 +166,23 @@ import ConnectionMap from "@/components/fx/ConnectionMap/ConnectionMap.astro";
 </style>
 
 <script>
-  function initStoryVideo() {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    document
-      .querySelectorAll<HTMLVideoElement>("video.ms-story__video")
-      .forEach((v) => {
-        if (reduce.matches) {
-          v.pause();
-          return;
-        }
-        const sync = (inView: boolean) => {
-          if (inView && !document.hidden) v.play().catch(() => {});
-          else v.pause();
-        };
-        const io = new IntersectionObserver(
-          (entries) => entries.forEach((e) => sync(e.isIntersecting)),
-          { threshold: 0.1 },
-        );
-        io.observe(v);
-        document.addEventListener("visibilitychange", () =>
-          sync(!document.hidden && v.getBoundingClientRect().bottom > 0),
-        );
-      });
+  import { initVideo } from "@/lib/videoPlayer";
+
+  const teardowns = new Map<HTMLVideoElement, () => void>();
+
+  function mountStory() {
+    document.querySelectorAll<HTMLVideoElement>("video.ms-story__video").forEach((v) => {
+      if (teardowns.has(v)) return;
+      teardowns.set(v, initVideo(v, { threshold: 0.1 }));
+    });
   }
-  initStoryVideo();
-  document.addEventListener("astro:after-swap", initStoryVideo);
+
+  function unmountStory() {
+    teardowns.forEach((fn) => fn());
+    teardowns.clear();
+  }
+
+  mountStory();
+  document.addEventListener("astro:after-swap", mountStory);
+  document.addEventListener("astro:before-swap", unmountStory);
 </script>

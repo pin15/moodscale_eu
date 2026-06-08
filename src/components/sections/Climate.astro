@@ -8,12 +8,14 @@ import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
       class="ms-climatebeat__video"
       poster="/assets/video/climate-poster.jpg"
       muted
+      autoplay
       loop
       playsinline
+      webkit-playsinline
       preload="metadata"
     >
-      <source src="/assets/video/climate-loop.webm" type="video/webm" />
       <source src="/assets/video/climate-loop.mp4" type="video/mp4" />
+      <source src="/assets/video/climate-loop.webm" type="video/webm" />
     </video>
   </div>
 
@@ -105,7 +107,7 @@ import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
   .ms-climatebeat__title {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+    font-size: var(--fs-h2);
     line-height: 1.15;
     letter-spacing: -0.01em;
     color: var(--ms-on-dark);
@@ -116,7 +118,7 @@ import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
   }
   .ms-climatebeat__body {
     color: var(--ms-on-dark);
-    font-size: clamp(1.05rem, 1.3vw, 1.35rem);
+    font-size: var(--fs-body);
     line-height: var(--lh-body);
     max-width: 92ch;
     margin-inline: auto;
@@ -130,7 +132,7 @@ import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
     max-width: 32ch;
     text-align: center;
     font-family: var(--font-display);
-    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    font-size: var(--fs-h2);
     line-height: 1.25;
     color: var(--ms-on-dark);
     text-shadow:
@@ -145,29 +147,23 @@ import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
 </style>
 
 <script>
-  function initClimateVideo() {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    document
-      .querySelectorAll<HTMLVideoElement>("video.ms-climatebeat__video")
-      .forEach((v) => {
-        if (reduce.matches) {
-          v.pause();
-          return;
-        }
-        const sync = (inView: boolean) => {
-          if (inView && !document.hidden) v.play().catch(() => {});
-          else v.pause();
-        };
-        const io = new IntersectionObserver(
-          (entries) => entries.forEach((e) => sync(e.isIntersecting)),
-          { threshold: 0.1 },
-        );
-        io.observe(v);
-        document.addEventListener("visibilitychange", () =>
-          sync(!document.hidden && v.getBoundingClientRect().bottom > 0),
-        );
-      });
+  import { initVideo } from "@/lib/videoPlayer";
+
+  const teardowns = new Map<HTMLVideoElement, () => void>();
+
+  function mountClimate() {
+    document.querySelectorAll<HTMLVideoElement>("video.ms-climatebeat__video").forEach((v) => {
+      if (teardowns.has(v)) return;
+      teardowns.set(v, initVideo(v, { threshold: 0.1 }));
+    });
   }
-  initClimateVideo();
-  document.addEventListener("astro:after-swap", initClimateVideo);
+
+  function unmountClimate() {
+    teardowns.forEach((fn) => fn());
+    teardowns.clear();
+  }
+
+  mountClimate();
+  document.addEventListener("astro:after-swap", mountClimate);
+  document.addEventListener("astro:before-swap", unmountClimate);
 </script>

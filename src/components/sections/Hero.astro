@@ -7,13 +7,15 @@ import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
     class="ms-hero__bg"
     poster="/assets/video/hero-bg-poster.jpg"
     muted
+    autoplay
     loop
     playsinline
+    webkit-playsinline
     preload="metadata"
     aria-hidden="true"
   >
-    <source src="/assets/video/hero-bg.webm" type="video/webm" />
     <source src="/assets/video/hero-bg.mp4" type="video/mp4" />
+    <source src="/assets/video/hero-bg.webm" type="video/webm" />
   </video>
   <div class="ms-hero__scrim" aria-hidden="true"></div>
 
@@ -98,7 +100,7 @@ import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
     font-weight: 500;
     font-optical-sizing: auto;
     font-variation-settings: "opsz" var(--opsz-display), "SOFT" 40;
-    font-size: clamp(2.6rem, 5vw, 4.6rem);
+    font-size: var(--fs-hero);
     line-height: 1.04;
     letter-spacing: -0.02em;
     color: var(--ms-on-dark);
@@ -146,30 +148,23 @@ import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
 </style>
 
 <script>
-  function initHeroBg() {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    document
-      .querySelectorAll<HTMLVideoElement>("video.ms-hero__bg")
-      .forEach((v) => {
-        v.playbackRate = 0.5;
-        if (reduce.matches) {
-          v.pause();
-          return;
-        }
-        const sync = (inView: boolean) => {
-          if (inView && !document.hidden) v.play().catch(() => {});
-          else v.pause();
-        };
-        const io = new IntersectionObserver(
-          (entries) => entries.forEach((e) => sync(e.isIntersecting)),
-          { threshold: 0 },
-        );
-        io.observe(v);
-        document.addEventListener("visibilitychange", () =>
-          sync(!document.hidden && v.getBoundingClientRect().bottom > 0),
-        );
-      });
+  import { initVideo } from "@/lib/videoPlayer";
+
+  const teardowns = new Map<HTMLVideoElement, () => void>();
+
+  function mountHero() {
+    document.querySelectorAll<HTMLVideoElement>("video.ms-hero__bg").forEach((v) => {
+      if (teardowns.has(v)) return;
+      teardowns.set(v, initVideo(v, { threshold: 0, playbackRate: 0.5 }));
+    });
   }
-  initHeroBg();
-  document.addEventListener("astro:after-swap", initHeroBg);
+
+  function unmountHero() {
+    teardowns.forEach((fn) => fn());
+    teardowns.clear();
+  }
+
+  mountHero();
+  document.addEventListener("astro:after-swap", mountHero);
+  document.addEventListener("astro:before-swap", unmountHero);
 </script>
