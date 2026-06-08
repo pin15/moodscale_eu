@@ -106,10 +106,12 @@ import TextReveal from "@/components/fx/TextReveal/TextReveal.astro";
   }
   .ms-climatebeat__title {
     font-family: var(--font-display);
-    font-weight: 600;
-    font-size: var(--fs-h2);
-    line-height: 1.15;
-    letter-spacing: -0.01em;
+    font-weight: 500;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" var(--opsz-display), "SOFT" 40;
+    font-size: var(--fs-h1);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
     color: var(--ms-on-dark);
     text-shadow:
       0 2px 4px rgba(8, 16, 11, 0.55),

@@ -205,9 +205,14 @@ import GlobalConnectionMap from "@/components/GlobalConnectionMap.astro";
     margin-inline: auto;
   }
   .ms-connect__title {
-    color: var(--ms-on-dark);
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" var(--opsz-display), "SOFT" 40;
     font-size: var(--fs-h1);
-    line-height: 1.15;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ms-on-dark);
   }
 
   .ms-connect__stats {
