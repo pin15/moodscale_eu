@@ -31,6 +31,10 @@ const H = map.image.height;
 const a = points.find((p) => p.data === "from")!;
 const b = points.find((p) => p.data === "to")!;
 
+const fromLines = fromLabel.split("\n");
+const toLines = toLabel.split("\n");
+const LINE = 4.4;
+
 const dx = b.x - a.x;
 const peak = Math.min(a.y, b.y) - Math.max(6, Math.abs(dx) * 0.16);
 const c1x = a.x + dx * 0.36;
@@ -87,8 +91,16 @@ const routeD = `M ${b.x.toFixed(1)} ${b.y.toFixed(1)} C ${c2x.toFixed(1)} ${(pea
       <circle r="0.55" fill="#ffffff" />
     </g>
 
-    <text class="city-label" x={(a.x - 5).toFixed(1)} y={(a.y + 1).toFixed(1)} text-anchor="end">{fromLabel}</text>
-    <text class="city-label" x={(b.x - 5).toFixed(1)} y={(b.y + 4).toFixed(1)} text-anchor="end">{toLabel}</text>
+    <text class="city-label" text-anchor="end">
+      {fromLines.map((line, i) => (
+        <tspan x={(a.x - 5).toFixed(1)} y={(a.y + 1 - (fromLines.length - 1) * (LINE / 2) + i * LINE).toFixed(1)}>{line}</tspan>
+      ))}
+    </text>
+    <text class="city-label" text-anchor="end">
+      {toLines.map((line, i) => (
+        <tspan x={(b.x - 5).toFixed(1)} y={(b.y + 4 - (toLines.length - 1) * (LINE / 2) + i * LINE).toFixed(1)}>{line}</tspan>
+      ))}
+    </text>
   </svg>
 </section>
 
